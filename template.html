@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alation Business Outcomes Library</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f4f5f7;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* ── Password Gate ── */
+    #gate {
+      position: fixed; inset: 0;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
+    }
+    .gate-card {
+      background: white;
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%; max-width: 400px;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    }
+    .gate-logo {
+      width: 48px; height: 48px;
+      background: #F05A28;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 24px; font-weight: 900; color: white;
+    }
+    .gate-card h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+    .gate-card p { font-size: 14px; color: #6b7280; margin-bottom: 28px; }
+    .gate-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 12px;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    .gate-input:focus { border-color: #F05A28; }
+    .gate-btn {
+      width: 100%;
+      padding: 13px;
+      background: #F05A28;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .gate-btn:hover { background: #d94e20; }
+    .gate-error {
+      color: #ef4444;
+      font-size: 13px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* ── Main App ── */
+    #app { display: none; }
+
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .logo-mark {
+      width: 36px; height: 36px;
+      background: #F05A28;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; color: white;
+    }
+    .header-title { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+    .header-sub { font-size: 12px; color: #9ca3af; margin-top: 1px; }
+    .header-meta { font-size: 12px; color: #9ca3af; }
+
+    .main { max-width: 1400px; margin: 0 auto; padding: 28px 32px; }
+
+    /* ── Stats Cards ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid #e5e7eb;
+    }
+    .stat-label { font-size: 12px; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-value { font-size: 36px; font-weight: 800; color: #1a1a2e; margin: 4px 0 2px; line-height: 1; }
+    .stat-value.orange { color: #F05A28; }
+    .stat-sub { font-size: 12px; color: #9ca3af; }
+
+    /* ── Alert Banner ── */
+    .alert-banner {
+      background: #fff8f0;
+      border: 1px solid #fed7aa;
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: #92400e;
+    }
+    .alert-icon { font-size: 16px; flex-shrink: 0; }
+
+    /* ── Filters ── */
+    .filters-bar {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .filter-label { font-size: 12px; font-weight: 600; color: #6b7280; white-space: nowrap; }
+    .filter-select, .search-input {
+      padding: 8px 12px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #1a1a2e;
+      background: #f9fafb;
+      outline: none;
+      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+    .filter-select:focus, .search-input:focus { border-color: #F05A28; background: white; }
+    .search-input { flex: 1; min-width: 200px; }
+    .filter-clear {
+      padding: 8px 14px;
+      background: #f3f4f6;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-clear:hover { background: #e5e7eb; color: #374151; }
+    .results-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    /* ── Table ── */
+    .table-wrap {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6b7280;
+      background: #f9fafb;
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    thead th:hover { color: #F05A28; }
+    thead th.sorted { color: #F05A28; }
+
+    tbody tr {
+      border-bottom: 1px solid #f3f4f6;
+      transition: background 0.1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafafa; }
+    tbody tr.incomplete { background: #fffbf5; }
+    tbody tr.incomplete:hover { background: #fff8f0; }
+
+    td {
+      padding: 13px 16px;
+      font-size: 13px;
+      color: #374151;
+      vertical-align: top;
+    }
+
+    .outcome-name { font-weight: 600; color: #1a1a2e; max-width: 280px; line-height: 1.4; }
+    .incomplete-name { color: #9ca3af; font-style: italic; font-weight: 400; }
+    .incomplete-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      margin: 2px 2px 2px 0;
+      white-space: nowrap;
+    }
+    .tag-industry { background: #eff6ff; color: #1d4ed8; }
+    .tag-product { background: #f0fdf4; color: #15803d; }
+    .tag-type-money { background: #fef9c3; color: #854d0e; }
+    .tag-type-risk { background: #fef2f2; color: #991b1b; }
+    .tag-type-compliance { background: #ede9fe; color: #5b21b6; }
+    .tag-stage { background: #e0f2fe; color: #0369a1; }
+    .tag-missing { background: #f3f4f6; color: #9ca3af; font-style: italic; }
+
+    .date-cell { color: #9ca3af; font-size: 12px; white-space: nowrap; }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #9ca3af;
+    }
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    /* ── Industry Summary (bottom) ── */
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin: 28px 0 14px;
+    }
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .industry-card {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .industry-card:hover, .industry-card.active {
+      border-color: #F05A28;
+      box-shadow: 0 0 0 3px rgba(240,90,40,0.08);
+    }
+    .industry-card .i-name { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+    .industry-card .i-count { font-size: 28px; font-weight: 800; color: #F05A28; line-height: 1; }
+    .industry-card .i-sub { font-size: 11px; color: #9ca3af; margin-top: 2px; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: #d1d5db;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Password Gate ── -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">A</div>
+    <h1>Business Outcomes Library</h1>
+    <p>Enter the password to access this document</p>
+    <input class="gate-input" id="pwd-input" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')checkPwd()">
+    <button class="gate-btn" onclick="checkPwd()">Access Library</button>
+    <p class="gate-error" id="pwd-error">Incorrect password. Please try again.</p>
+  </div>
+</div>
+
+<!-- ── Main App ── -->
+<div id="app">
+  <header>
+    <div class="header-left">
+      <div class="logo-mark">A</div>
+      <div>
+        <div class="header-title">Business Outcomes Library</div>
+        <div class="header-sub">Alation Internal · Valhalla/Salesforce</div>
+      </div>
+    </div>
+    <div class="header-meta">Last refreshed: April 29, 2026</div>
+  </header>
+
+  <div class="main">
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Outcomes</div>
+        <div class="stat-value orange" id="stat-total">27</div>
+        <div class="stat-sub">across all industries</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Industries</div>
+        <div class="stat-value">9</div>
+        <div class="stat-sub">represented</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Product Mapped</div>
+        <div class="stat-value">11</div>
+        <div class="stat-sub">of 27 outcomes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Needs Attention</div>
+        <div class="stat-value orange">16</div>
+        <div class="stat-sub">missing product or name</div>
+      </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert-banner">
+      <span class="alert-icon">⚠️</span>
+      <span><strong>9 outcomes have auto-generated names</strong> and <strong>16 are missing product mapping.</strong> These records need to be updated in Salesforce to be fully usable.</span>
+    </div>
+
+    <!-- Industry Quick Filter -->
+    <div class="section-title">Filter by Industry</div>
+    <div class="industry-grid" id="industry-grid"></div>
+
+    <!-- Filters Bar -->
+    <div class="filters-bar">
+      <span class="filter-label">Filter:</span>
+      <input class="search-input" id="search" type="text" placeholder="Search outcomes..." oninput="applyFilters()">
+      <select class="filter-select" id="f-industry" onchange="applyFilters()">
+        <option value="">All Industries</option>
+      </select>
+      <select class="filter-select" id="f-product" onchange="applyFilters()">
+        <option value="">All Products</option>
+      </select>
+      <select class="filter-select" id="f-type" onchange="applyFilters()">
+        <option value="">All Outcome Types</option>
+      </select>
+      <select class="filter-select" id="f-complete" onchange="applyFilters()">
+        <option value="">All Records</option>
+        <option value="complete">Complete only</option>
+        <option value="incomplete">Needs attention</option>
+      </select>
+      <select class="filter-select" id="f-team" onchange="applyFilters()">
+        <option value="">All Team Members</option>
+        <option value="unassigned-ds">No DS Assigned</option>
+      </select>
+      <button class="filter-clear" onclick="clearFilters()">Clear filters</button>
+      <span class="results-count" id="results-count"></span>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('name')">Outcome Name</th>
+            <th onclick="sortBy('account')">Account</th>
+            <th onclick="sortBy('industry')">Industry</th>
+            <th>Products</th>
+            <th>Outcome Type</th>
+            <th>Team</th>
+            <th onclick="sortBy('stage')">Stage</th>
+            <th onclick="sortBy('created')">Created</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+
+    <footer>Alation Confidential · Data sourced from Valhalla.Salesforce.BUSINESS_OUTCOME__C · April 29, 2026</footer>
+  </div>
+</div>
+
+<script>
+// ── Auth ──
+const PASSWORD = "Alation2026!";
+function checkPwd() {
+  const val = document.getElementById('pwd-input').value;
+  if (val === PASSWORD) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+  } else {
+    const err = document.getElementById('pwd-error');
+    err.style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+    setTimeout(() => err.style.display = 'none', 3000);
+  }
+}
+
+const SF_BASE = "https://alation.lightning.force.com/lightning/r/Business_Outcome__c";
+const RAW = DATA_PLACEHOLDER;
+
+// Normalize and compute fields
+const DATA = RAW.map((r, i) => {
+  const products = [r.primaryProduct, r.product].filter(Boolean).join(';');
+  const allProducts = products ? [...new Set(products.split(';').map(p => p.trim()).filter(Boolean))] : [];
+  const allTypes = r.type ? r.type.split(';').map(t => t.trim()).filter(Boolean) : [];
+  const hasName = Boolean(r.name && r.name.trim());
+  const hasProduct = allProducts.length > 0;
+  const isComplete = hasName && hasProduct;
+  return { ...r, id: i, allProducts, allTypes, hasName, hasProduct, isComplete, displayName: hasName ? r.name : '(Unnamed — needs update)' };
+});
+
+// ── State ──
+let sortField = 'created';
+let sortDir = 1;
+let activeIndustry = '';
+
+// ── Build filter options ──
+function buildFilters() {
+  const industries = [...new Set(DATA.map(d => d.industry))].sort();
+  const products = [...new Set(DATA.flatMap(d => d.allProducts))].sort();
+  const types = [...new Set(DATA.flatMap(d => d.allTypes))].sort();
+  // All unique people across DS, Sales Lead, and FDE
+  const teamSet = new Set();
+  DATA.forEach(d => {
+    if (d.ds) teamSet.add(d.ds);
+    if (d.salesLead) teamSet.add(d.salesLead);
+    if (d.fde) teamSet.add(d.fde);
+  });
+  const teamList = [...teamSet].sort();
+
+  const iSel = document.getElementById('f-industry');
+  industries.forEach(i => { const o = new Option(i, i); iSel.add(o); });
+
+  const pSel = document.getElementById('f-product');
+  products.forEach(p => { const o = new Option(p, p); pSel.add(o); });
+
+  const tSel = document.getElementById('f-type');
+  types.forEach(t => { const o = new Option(t, t); tSel.add(o); });
+
+  const tmSel = document.getElementById('f-team');
+  teamList.forEach(name => { const o = new Option(name, name); tmSel.add(o); });
+}
+
+// ── Build industry grid ──
+function buildIndustryGrid() {
+  const counts = {};
+  DATA.forEach(d => counts[d.industry] = (counts[d.industry] || 0) + 1);
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+  const grid = document.getElementById('industry-grid');
+  sorted.forEach(([industry, count]) => {
+    const card = document.createElement('div');
+    card.className = 'industry-card';
+    card.dataset.industry = industry;
+    card.innerHTML = `
+      <div class="i-name">${industry}</div>
+      <div class="i-count">${count}</div>
+      <div class="i-sub">outcome${count !== 1 ? 's' : ''}</div>
+    `;
+    card.onclick = () => {
+      if (activeIndustry === industry) {
+        activeIndustry = '';
+        card.classList.remove('active');
+        document.getElementById('f-industry').value = '';
+      } else {
+        activeIndustry = industry;
+        document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        document.getElementById('f-industry').value = industry;
+      }
+      applyFilters();
+    };
+    grid.appendChild(card);
+  });
+}
+
+// ── Tag helpers ──
+function productTag(p) {
+  return `<span class="tag tag-product">${p}</span>`;
+}
+function typeTag(t) {
+  let cls = 'tag-type-risk';
+  if (t === 'Save Money' || t === 'Make Money') cls = 'tag-type-money';
+  if (t === 'Compliance') cls = 'tag-type-compliance';
+  return `<span class="tag ${cls}">${t}</span>`;
+}
+
+// ── Filter & render ──
+function applyFilters() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const fInd = document.getElementById('f-industry').value;
+  const fProd = document.getElementById('f-product').value;
+  const fType = document.getElementById('f-type').value;
+  const fComp = document.getElementById('f-complete').value;
+  const fTeam = document.getElementById('f-team').value;
+
+  // Sync industry grid
+  if (fInd !== activeIndustry) {
+    activeIndustry = fInd;
+    document.querySelectorAll('.industry-card').forEach(c => {
+      c.classList.toggle('active', c.dataset.industry === fInd);
+    });
+  }
+
+  let filtered = DATA.filter(d => {
+    const teamStr = [d.ds, d.salesLead, d.fde].filter(Boolean).join(' ').toLowerCase();
+    if (search && !d.displayName.toLowerCase().includes(search) && !d.account.toLowerCase().includes(search) && !d.industry.toLowerCase().includes(search) && !d.allProducts.join(' ').toLowerCase().includes(search) && !d.allTypes.join(' ').toLowerCase().includes(search) && !teamStr.includes(search)) return false;
+    if (fInd && d.industry !== fInd) return false;
+    if (fProd && !d.allProducts.includes(fProd)) return false;
+    if (fType && !d.allTypes.includes(fType)) return false;
+    if (fComp === 'complete' && !d.isComplete) return false;
+    if (fComp === 'incomplete' && d.isComplete) return false;
+    if (fTeam === 'unassigned-ds' && d.ds) return false;
+    if (fTeam && fTeam !== 'unassigned-ds' && d.ds !== fTeam && d.salesLead !== fTeam && d.fde !== fTeam) return false;
+    return true;
+  });
+
+  // Sort
+  filtered.sort((a, b) => {
+    let av = a[sortField] || '';
+    let bv = b[sortField] || '';
+    if (sortField === 'name') { av = a.displayName; bv = b.displayName; }
+    return av < bv ? -sortDir : av > bv ? sortDir : 0;
+  });
+
+  renderTable(filtered);
+  document.getElementById('results-count').textContent = `Showing ${filtered.length} of ${DATA.length}`;
+}
+
+function renderTable(rows) {
+  const tbody = document.getElementById('table-body');
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">🔍</div><p>No outcomes match your filters.</p></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(d => {
+    const sfUrl = `${SF_BASE}/${d.recordId}/view`;
+    const sfLink = `<a href="${sfUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:#F05A28;text-decoration:none;opacity:0.85;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">↗ View in Salesforce</a>`;
+    const nameHtml = d.hasName
+      ? `<div class="outcome-name">${d.name}</div>${sfLink}`
+      : `<div class="outcome-name incomplete-name">Unnamed record</div><div class="incomplete-badge">NEEDS NAME</div>${sfLink}`;
+
+    const prodHtml = d.allProducts.length
+      ? d.allProducts.map(p => productTag(p)).join('')
+      : `<span class="tag tag-missing">Not mapped</span>`;
+
+    const typeHtml = d.allTypes.length
+      ? d.allTypes.map(t => typeTag(t)).join('')
+      : `<span class="tag tag-missing">—</span>`;
+
+    const teamLines = [];
+    teamLines.push(d.ds
+      ? `<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">DS</span> <span style="color:#1a1a2e;font-weight:500;">${d.ds}</span></div>`
+      : `<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">DS</span> <span class="incomplete-badge" style="margin:0;">UNASSIGNED</span></div>`
+    );
+    if (d.salesLead) teamLines.push(`<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">AE</span> <span style="color:#374151;">${d.salesLead}</span></div>`);
+    if (d.fde) teamLines.push(`<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">FDE</span> <span style="color:#374151;">${d.fde}</span></div>`);
+    const dsHtml = teamLines.join('');
+
+    const stageHtml = d.stage
+      ? `<span class="tag tag-stage">${d.stage}</span>`
+      : `<span style="color:#d1d5db">—</span>`;
+
+    const dateStr = d.created ? new Date(d.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+
+    return `<tr class="${d.isComplete ? '' : 'incomplete'}">
+      <td>${nameHtml}</td>
+      <td style="font-weight:500;color:#1a1a2e;white-space:nowrap;">${d.account || '<span style="color:#d1d5db">—</span>'}</td>
+      <td><span class="tag tag-industry">${d.industry}</span></td>
+      <td>${prodHtml}</td>
+      <td>${typeHtml}</td>
+      <td>${dsHtml}</td>
+      <td>${stageHtml}</td>
+      <td class="date-cell">${dateStr}</td>
+    </tr>`;
+  }).join('');
+}
+
+function sortBy(field) {
+  if (sortField === field) sortDir *= -1;
+  else { sortField = field; sortDir = 1; }
+  applyFilters();
+}
+
+function clearFilters() {
+  document.getElementById('search').value = '';
+  document.getElementById('f-industry').value = '';
+  document.getElementById('f-product').value = '';
+  document.getElementById('f-type').value = '';
+  document.getElementById('f-complete').value = '';
+  document.getElementById('f-team').value = '';
+  activeIndustry = '';
+  document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
+  applyFilters();
+}
+
+// ── Init ──
+buildFilters();
+buildIndustryGrid();
+applyFilters();
+</script>
+</body>
+</html>

@@ -560,10 +560,10 @@ function renderTable(rows) {
   }
   tbody.innerHTML = rows.map(d => {
     const sfUrl  = `${SF_BASE}/${d.recordId}/view`;
-    const sfLink = `<a href="${sfUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:#F05A28;text-decoration:none;opacity:0.85;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">â View in Salesforce</a>`;
+    const sfLink = `<a href="${sfUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:#F05A28;text-decoration:none;opacity:0.85;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">&#x2197; View in Salesforce</a>`;
 
     const stmtPreview = d.statement
-      ? `<div style="font-size:11px;color:#6b7280;line-height:1.5;margin-top:5px;max-width:300px;">${d.statement.length > 160 ? d.statement.slice(0, 160).trim() + 'â¦' : d.statement}</div>`
+      ? `<div style="font-size:11px;color:#6b7280;line-height:1.5;margin-top:5px;max-width:300px;">${d.statement.length > 160 ? d.statement.slice(0, 160).trim() + '...' : d.statement}</div>`
       : '';
 
     const nameHtml = d.hasName

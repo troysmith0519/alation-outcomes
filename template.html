@@ -6,14 +6,12 @@
   <title>Alation Business Outcomes Library</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #f4f5f7;
       color: #1a1a2e;
       min-height: 100vh;
     }
-
     /* ── Password Gate ── */
     #gate {
       position: fixed; inset: 0;
@@ -71,10 +69,8 @@
       margin-top: 10px;
       display: none;
     }
-
     /* ── Main App ── */
     #app { display: none; }
-
     header {
       background: white;
       border-bottom: 1px solid #e5e7eb;
@@ -95,9 +91,7 @@
     .header-title { font-size: 17px; font-weight: 700; color: #1a1a2e; }
     .header-sub { font-size: 12px; color: #9ca3af; margin-top: 1px; }
     .header-meta { font-size: 12px; color: #9ca3af; }
-
     .main { max-width: 1400px; margin: 0 auto; padding: 28px 32px; }
-
     /* ── Stats Cards ── */
     .stats-row {
       display: grid;
@@ -115,7 +109,6 @@
     .stat-value { font-size: 36px; font-weight: 800; color: #1a1a2e; margin: 4px 0 2px; line-height: 1; }
     .stat-value.orange { color: #F05A28; }
     .stat-sub { font-size: 12px; color: #9ca3af; }
-
     /* ── Alert Banner ── */
     .alert-banner {
       background: #fff8f0;
@@ -127,7 +120,6 @@
       font-size: 13px; color: #92400e;
     }
     .alert-icon { font-size: 16px; flex-shrink: 0; }
-
     /* ── Filters ── */
     .filters-bar {
       background: white;
@@ -169,7 +161,6 @@
       color: #9ca3af;
       white-space: nowrap;
     }
-
     /* ── Table ── */
     .table-wrap {
       background: white;
@@ -194,7 +185,6 @@
     }
     thead th:hover { color: #F05A28; }
     thead th.sorted { color: #F05A28; }
-
     tbody tr {
       border-bottom: 1px solid #f3f4f6;
       transition: background 0.1s;
@@ -203,14 +193,12 @@
     tbody tr:hover { background: #fafafa; }
     tbody tr.incomplete { background: #fffbf5; }
     tbody tr.incomplete:hover { background: #fff8f0; }
-
     td {
       padding: 13px 16px;
       font-size: 13px;
       color: #374151;
       vertical-align: top;
     }
-
     .outcome-name { font-weight: 600; color: #1a1a2e; max-width: 280px; line-height: 1.4; }
     .incomplete-name { color: #9ca3af; font-style: italic; font-weight: 400; }
     .incomplete-badge {
@@ -224,7 +212,6 @@
       margin-top: 4px;
       letter-spacing: 0.04em;
     }
-
     .tag {
       display: inline-block;
       padding: 3px 8px;
@@ -241,9 +228,7 @@
     .tag-type-compliance { background: #ede9fe; color: #5b21b6; }
     .tag-stage { background: #e0f2fe; color: #0369a1; }
     .tag-missing { background: #f3f4f6; color: #9ca3af; font-style: italic; }
-
     .date-cell { color: #9ca3af; font-size: 12px; white-space: nowrap; }
-
     .empty-state {
       text-align: center;
       padding: 60px 20px;
@@ -251,8 +236,7 @@
     }
     .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
     .empty-state p { font-size: 14px; }
-
-    /* ── Industry Summary (bottom) ── */
+    /* ── Industry Summary ── */
     .section-title {
       font-size: 14px;
       font-weight: 700;
@@ -280,7 +264,6 @@
     .industry-card .i-name { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
     .industry-card .i-count { font-size: 28px; font-weight: 800; color: #F05A28; line-height: 1; }
     .industry-card .i-sub { font-size: 11px; color: #9ca3af; margin-top: 2px; }
-
     footer {
       text-align: center;
       padding: 24px;
@@ -315,9 +298,7 @@
     </div>
     <div class="header-meta">Last refreshed: April 29, 2026</div>
   </header>
-
   <div class="main">
-
     <!-- Stats -->
     <div class="stats-row">
       <div class="stat-card">
@@ -341,17 +322,14 @@
         <div class="stat-sub">missing product or name</div>
       </div>
     </div>
-
     <!-- Alert -->
     <div class="alert-banner">
       <span class="alert-icon">⚠️</span>
       <span><strong>9 outcomes have auto-generated names</strong> and <strong>16 are missing product mapping.</strong> These records need to be updated in Salesforce to be fully usable.</span>
     </div>
-
     <!-- Industry Quick Filter -->
     <div class="section-title">Filter by Industry</div>
     <div class="industry-grid" id="industry-grid"></div>
-
     <!-- Filters Bar -->
     <div class="filters-bar">
       <span class="filter-label">Filter:</span>
@@ -377,7 +355,6 @@
       <button class="filter-clear" onclick="clearFilters()">Clear filters</button>
       <span class="results-count" id="results-count"></span>
     </div>
-
     <!-- Table -->
     <div class="table-wrap">
       <table>
@@ -396,7 +373,6 @@
         <tbody id="table-body"></tbody>
       </table>
     </div>
-
     <footer>Alation Confidential · Data sourced from Valhalla.Salesforce.BUSINESS_OUTCOME__C · April 29, 2026</footer>
   </div>
 </div>
@@ -442,7 +418,6 @@ function buildFilters() {
   const industries = [...new Set(DATA.map(d => d.industry))].sort();
   const products = [...new Set(DATA.flatMap(d => d.allProducts))].sort();
   const types = [...new Set(DATA.flatMap(d => d.allTypes))].sort();
-  // All unique people across DS, Sales Lead, and FDE
   const teamSet = new Set();
   DATA.forEach(d => {
     if (d.ds) teamSet.add(d.ds);
@@ -450,16 +425,12 @@ function buildFilters() {
     if (d.fde) teamSet.add(d.fde);
   });
   const teamList = [...teamSet].sort();
-
   const iSel = document.getElementById('f-industry');
   industries.forEach(i => { const o = new Option(i, i); iSel.add(o); });
-
   const pSel = document.getElementById('f-product');
   products.forEach(p => { const o = new Option(p, p); pSel.add(o); });
-
   const tSel = document.getElementById('f-type');
   types.forEach(t => { const o = new Option(t, t); tSel.add(o); });
-
   const tmSel = document.getElementById('f-team');
   teamList.forEach(name => { const o = new Option(name, name); tmSel.add(o); });
 }
@@ -469,7 +440,6 @@ function buildIndustryGrid() {
   const counts = {};
   DATA.forEach(d => counts[d.industry] = (counts[d.industry] || 0) + 1);
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-
   const grid = document.getElementById('industry-grid');
   sorted.forEach(([industry, count]) => {
     const card = document.createElement('div');
@@ -511,13 +481,12 @@ function typeTag(t) {
 // ── Filter & render ──
 function applyFilters() {
   const search = document.getElementById('search').value.toLowerCase();
-  const fInd = document.getElementById('f-industry').value;
+  const fInd  = document.getElementById('f-industry').value;
   const fProd = document.getElementById('f-product').value;
   const fType = document.getElementById('f-type').value;
   const fComp = document.getElementById('f-complete').value;
   const fTeam = document.getElementById('f-team').value;
 
-  // Sync industry grid
   if (fInd !== activeIndustry) {
     activeIndustry = fInd;
     document.querySelectorAll('.industry-card').forEach(c => {
@@ -528,17 +497,16 @@ function applyFilters() {
   let filtered = DATA.filter(d => {
     const teamStr = [d.ds, d.salesLead, d.fde].filter(Boolean).join(' ').toLowerCase();
     if (search && !d.displayName.toLowerCase().includes(search) && !d.account.toLowerCase().includes(search) && !d.industry.toLowerCase().includes(search) && !d.allProducts.join(' ').toLowerCase().includes(search) && !d.allTypes.join(' ').toLowerCase().includes(search) && !teamStr.includes(search)) return false;
-    if (fInd && d.industry !== fInd) return false;
+    if (fInd  && d.industry !== fInd) return false;
     if (fProd && !d.allProducts.includes(fProd)) return false;
     if (fType && !d.allTypes.includes(fType)) return false;
-    if (fComp === 'complete' && !d.isComplete) return false;
-    if (fComp === 'incomplete' && d.isComplete) return false;
+    if (fComp === 'complete'   && !d.isComplete) return false;
+    if (fComp === 'incomplete' &&  d.isComplete) return false;
     if (fTeam === 'unassigned-ds' && d.ds) return false;
     if (fTeam && fTeam !== 'unassigned-ds' && d.ds !== fTeam && d.salesLead !== fTeam && d.fde !== fTeam) return false;
     return true;
   });
 
-  // Sort
   filtered.sort((a, b) => {
     let av = a[sortField] || '';
     let bv = b[sortField] || '';
@@ -556,12 +524,16 @@ function renderTable(rows) {
     tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">🔍</div><p>No outcomes match your filters.</p></div></td></tr>`;
     return;
   }
-
   tbody.innerHTML = rows.map(d => {
-    const sfUrl = `${SF_BASE}/${d.recordId}/view`;
+    const sfUrl  = `${SF_BASE}/${d.recordId}/view`;
     const sfLink = `<a href="${sfUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:#F05A28;text-decoration:none;opacity:0.85;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">↗ View in Salesforce</a>`;
+
+    const stmtPreview = d.statement
+      ? `<div style="font-size:11px;color:#6b7280;line-height:1.5;margin-top:5px;max-width:300px;">${d.statement.length > 160 ? d.statement.slice(0, 160).trim() + '\u2026' : d.statement}</div>`
+      : '';
+
     const nameHtml = d.hasName
-      ? `<div class="outcome-name">${d.name}</div>${sfLink}`
+      ? `<div class="outcome-name">${d.name}</div>${stmtPreview}${sfLink}`
       : `<div class="outcome-name incomplete-name">Unnamed record</div><div class="incomplete-badge">NEEDS NAME</div>${sfLink}`;
 
     const prodHtml = d.allProducts.length

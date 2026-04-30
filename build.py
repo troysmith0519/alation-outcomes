@@ -15,14 +15,15 @@ TEMPLATE_PATH    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tem
 
 # ── Auth ─────────────────────────────────────────────────────────────────────
 def get_api_token():
-            resp = requests.post(
-                            f"{ALATION_BASE_URL}/integration/v1/createAPIAccessToken/",
-                            json={"refresh_token": REFRESH_TOKEN, "user_id": USER_ID},
-                            verify=False
-            )
-            resp.raise_for_status()
-            return resp.json()["api_access_token"]
-        # ── Fetch ─────────────────────────────────────────────────────────────────────
+    resp = requests.post(
+        f"{ALATION_BASE_URL}/integration/v1/createAPIAccessToken/",
+        json={"refresh_token": REFRESH_TOKEN, "user_id": USER_ID},
+        verify=False
+    )
+    resp.raise_for_status()
+    return resp.json()["api_access_token"]
+
+# ── Fetch ─────────────────────────────────────────────────────────────────────
 def fetch_rows(api_token):
     resp = requests.get(
         f"{ALATION_BASE_URL}/integration/v1/query/{ALATION_QUERY_ID}/result/latest/",
@@ -44,21 +45,21 @@ def esc(s):
     return s.replace("\\", "\\\\").replace('"', '\\"')
 
 def row_to_js(row):
-    record_id    = esc(row.get("RECORD_ID", "") or "")
-    name         = esc(row.get("NAME", "") or "")
+    record_id    = esc(row.get("OUTCOME_ID", "") or "")
+    name         = esc(row.get("OUTCOME_NAME", "") or "")
     account      = esc(row.get("ACCOUNT_NAME", "") or "")
-    industry     = esc(row.get("INDUSTRY__C", "") or "")
+    industry     = esc(row.get("INDUSTRY", "") or "")
     if industry == "Health Care":
         industry = "Healthcare"
-    primary_prod = esc(row.get("PRIMARY_PRODUCT_AREA__C", "") or "")
-    product      = esc(row.get("PRODUCT__C", "") or "")
-    type_        = esc(row.get("BUSINESS_OUTCOME_TYPE__C", "") or "")
-    health       = esc(row.get("HEALTH_STATUS__C", "") or "")
-    stage        = esc(row.get("USE_CASE_STAGE__C", "") or "")
-    created      = (row.get("CREATEDDATE", "") or "")[:10]
-    ds           = esc(row.get("DEPLOYMENT_STRATEGIST__C", "") or "")
-    sales_lead   = esc(row.get("SALES_LEAD__C", "") or "")
-    fde          = esc(row.get("FORWARD_DEPLOYED_ENGINEER__C", "") or "")
+    primary_prod = esc(row.get("PRIMARY_PRODUCT_AREA", "") or "")
+    product      = esc(row.get("PRODUCT", "") or "")
+    type_        = esc(row.get("OUTCOME_TYPE", "") or "")
+    health       = esc(row.get("OUTCOME_HEALTH", "") or "")
+    stage        = esc(row.get("USE_CASE_STAGE", "") or "")
+    created      = (row.get("OUTCOME_CREATED_DATE", "") or "")[:10]
+    ds           = esc(row.get("DEPLOYMENT_STRATEGIST", "") or "")
+    sales_lead   = esc(row.get("SALES_LEAD", "") or "")
+    fde          = esc(row.get("FORWARD_DEPLOYED_ENGINEER", "") or "")
     statement    = esc(row.get("BUSINESS_OUTCOME_STATEMENT__C", "") or "")
     if name and name.startswith("aLdVt"):
         name = ""

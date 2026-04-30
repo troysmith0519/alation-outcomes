@@ -92,12 +92,6 @@ if __name__ == "__main__":
     token = get_api_token()
     print(f"Fetching query {ALATION_QUERY_ID}...")
     rows = fetch_rows(token)
-    if rows:
-        print(f"  Columns: {list(rows[0].keys())}")
-        stmt_cols = [k for k in rows[0].keys() if 'STATEMENT' in k.upper() or 'OUTCOME' in k.upper()]
-        print(f"  Statement-related cols: {stmt_cols}")
-        if stmt_cols:
-            print(f"  Sample values: { {k: rows[0][k] for k in stmt_cols} }")
     print(f"  {len(rows)} outcomes retrieved.")
     print("Building HTML...")
     html = build_html(rows)

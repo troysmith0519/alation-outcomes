@@ -15,9 +15,14 @@ TEMPLATE_PATH    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tem
 
 # ── Auth ─────────────────────────────────────────────────────────────────────
 def get_api_token():
-        return REFRESH_TOKEN
-    
-# ── Fetch ─────────────────────────────────────────────────────────────────────
+            resp = requests.post(
+                            f"{ALATION_BASE_URL}/integration/v1/createAPIAccessToken",
+                            json={"refresh_token": REFRESH_TOKEN, "user_id": USER_ID},
+                            verify=False
+            )
+            resp.raise_for_status()
+            return resp.json()["api_access_token"]
+        # ── Fetch ─────────────────────────────────────────────────────────────────────
 def fetch_rows(api_token):
     resp = requests.get(
         f"{ALATION_BASE_URL}/integration/v1/query/{ALATION_QUERY_ID}/result/latest/",

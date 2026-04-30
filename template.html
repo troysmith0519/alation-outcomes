@@ -12,7 +12,7 @@
       color: #1a1a2e;
       min-height: 100vh;
     }
-    /* ── Password Gate ── */
+    /* ââ Password Gate ââ */
     #gate {
       position: fixed; inset: 0;
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
@@ -69,7 +69,7 @@
       margin-top: 10px;
       display: none;
     }
-    /* ── Main App ── */
+    /* ââ Main App ââ */
     #app { display: none; }
     header {
       background: white;
@@ -92,7 +92,7 @@
     .header-sub { font-size: 12px; color: #9ca3af; margin-top: 1px; }
     .header-meta { font-size: 12px; color: #9ca3af; }
     .main { max-width: 1400px; margin: 0 auto; padding: 28px 32px; }
-    /* ── Stats Cards ── */
+    /* ââ Stats Cards ââ */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -109,7 +109,7 @@
     .stat-value { font-size: 36px; font-weight: 800; color: #1a1a2e; margin: 4px 0 2px; line-height: 1; }
     .stat-value.orange { color: #F05A28; }
     .stat-sub { font-size: 12px; color: #9ca3af; }
-    /* ── Alert Banner ── */
+    /* ââ Alert Banner ââ */
     .alert-banner {
       background: #fff8f0;
       border: 1px solid #fed7aa;
@@ -120,7 +120,7 @@
       font-size: 13px; color: #92400e;
     }
     .alert-icon { font-size: 16px; flex-shrink: 0; }
-    /* ── Filters ── */
+    /* ââ Filters ââ */
     .filters-bar {
       background: white;
       border-radius: 12px;
@@ -161,7 +161,7 @@
       color: #9ca3af;
       white-space: nowrap;
     }
-    /* ── Table ── */
+    /* ââ Table ââ */
     .table-wrap {
       background: white;
       border-radius: 12px;
@@ -236,7 +236,7 @@
     }
     .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
     .empty-state p { font-size: 14px; }
-    /* ── Industry Summary ── */
+    /* ââ Industry Summary ââ */
     .section-title {
       font-size: 14px;
       font-weight: 700;
@@ -274,7 +274,7 @@
 </head>
 <body>
 
-<!-- ── Password Gate ── -->
+<!-- ââ Password Gate ââ -->
 <div id="gate">
   <div class="gate-card">
     <div class="gate-logo">A</div>
@@ -286,14 +286,14 @@
   </div>
 </div>
 
-<!-- ── Main App ── -->
+<!-- ââ Main App ââ -->
 <div id="app">
   <header>
     <div class="header-left">
       <div class="logo-mark">A</div>
       <div>
         <div class="header-title">Business Outcomes Library</div>
-        <div class="header-sub">Alation Internal · Valhalla/Salesforce</div>
+        <div class="header-sub">Alation Internal Â· Valhalla/Salesforce</div>
       </div>
     </div>
     <div class="header-meta">Last refreshed: April 29, 2026</div>
@@ -324,7 +324,7 @@
     </div>
     <!-- Alert -->
     <div class="alert-banner">
-      <span class="alert-icon">⚠️</span>
+      <span class="alert-icon">â ï¸</span>
       <span><strong>9 outcomes have auto-generated names</strong> and <strong>16 are missing product mapping.</strong> These records need to be updated in Salesforce to be fully usable.</span>
     </div>
     <!-- Industry Quick Filter -->
@@ -348,9 +348,15 @@
         <option value="complete">Complete only</option>
         <option value="incomplete">Needs attention</option>
       </select>
-      <select class="filter-select" id="f-team" onchange="applyFilters()">
-        <option value="">All Team Members</option>
+      <select class="filter-select" id="f-ds" onchange="applyFilters()">
+        <option value="">All DS</option>
         <option value="unassigned-ds">No DS Assigned</option>
+      </select>
+      <select class="filter-select" id="f-ae" onchange="applyFilters()">
+        <option value="">All AE</option>
+      </select>
+      <select class="filter-select" id="f-fde" onchange="applyFilters()">
+        <option value="">All FDE</option>
       </select>
       <button class="filter-clear" onclick="clearFilters()">Clear filters</button>
       <span class="results-count" id="results-count"></span>
@@ -373,12 +379,12 @@
         <tbody id="table-body"></tbody>
       </table>
     </div>
-    <footer>Alation Confidential · Data sourced from Valhalla.Salesforce.BUSINESS_OUTCOME__C · April 29, 2026</footer>
+    <footer>Alation Confidential Â· Data sourced from Valhalla.Salesforce.BUSINESS_OUTCOME__C Â· April 29, 2026</footer>
   </div>
 </div>
 
 <script>
-// ── Auth ──
+// ââ Auth ââ
 const PASSWORD = "Alation2026!";
 function checkPwd() {
   const val = document.getElementById('pwd-input').value;
@@ -405,37 +411,42 @@ const DATA = RAW.map((r, i) => {
   const hasName = Boolean(r.name && r.name.trim());
   const hasProduct = allProducts.length > 0;
   const isComplete = hasName && hasProduct;
-  return { ...r, id: i, allProducts, allTypes, hasName, hasProduct, isComplete, displayName: hasName ? r.name : '(Unnamed — needs update)' };
+  return { ...r, id: i, allProducts, allTypes, hasName, hasProduct, isComplete, displayName: hasName ? r.name : '(Unnamed â needs update)' };
 });
 
-// ── State ──
+// ââ State ââ
 let sortField = 'created';
 let sortDir = 1;
 let activeIndustry = '';
 
-// ── Build filter options ──
+// ââ Build filter options ââ
 function buildFilters() {
   const industries = [...new Set(DATA.map(d => d.industry))].sort();
   const products = [...new Set(DATA.flatMap(d => d.allProducts))].sort();
   const types = [...new Set(DATA.flatMap(d => d.allTypes))].sort();
-  const teamSet = new Set();
+  const dsSet = new Set();
+  const aeSet = new Set();
+  const fdeSet = new Set();
   DATA.forEach(d => {
-    if (d.ds) teamSet.add(d.ds);
-    if (d.salesLead) teamSet.add(d.salesLead);
-    if (d.fde) teamSet.add(d.fde);
+    if (d.ds) dsSet.add(d.ds);
+    if (d.salesLead) aeSet.add(d.salesLead);
+    if (d.fde) fdeSet.add(d.fde);
   });
-  const teamList = [...teamSet].sort();
   const iSel = document.getElementById('f-industry');
   industries.forEach(i => { const o = new Option(i, i); iSel.add(o); });
   const pSel = document.getElementById('f-product');
   products.forEach(p => { const o = new Option(p, p); pSel.add(o); });
   const tSel = document.getElementById('f-type');
   types.forEach(t => { const o = new Option(t, t); tSel.add(o); });
-  const tmSel = document.getElementById('f-team');
-  teamList.forEach(name => { const o = new Option(name, name); tmSel.add(o); });
+  const dsSel = document.getElementById('f-ds');
+  [...dsSet].sort().forEach(name => { const o = new Option(name, name); dsSel.add(o); });
+  const aeSel = document.getElementById('f-ae');
+  [...aeSet].sort().forEach(name => { const o = new Option(name, name); aeSel.add(o); });
+  const fdeSel = document.getElementById('f-fde');
+  [...fdeSet].sort().forEach(name => { const o = new Option(name, name); fdeSel.add(o); });
 }
 
-// ── Build industry grid ──
+// ââ Build industry grid ââ
 function buildIndustryGrid() {
   const counts = {};
   DATA.forEach(d => counts[d.industry] = (counts[d.industry] || 0) + 1);
@@ -467,7 +478,7 @@ function buildIndustryGrid() {
   });
 }
 
-// ── Tag helpers ──
+// ââ Tag helpers ââ
 function productTag(p) {
   return `<span class="tag tag-product">${p}</span>`;
 }
@@ -478,14 +489,16 @@ function typeTag(t) {
   return `<span class="tag ${cls}">${t}</span>`;
 }
 
-// ── Filter & render ──
+// ââ Filter & render ââ
 function applyFilters() {
   const search = document.getElementById('search').value.toLowerCase();
   const fInd  = document.getElementById('f-industry').value;
   const fProd = document.getElementById('f-product').value;
   const fType = document.getElementById('f-type').value;
   const fComp = document.getElementById('f-complete').value;
-  const fTeam = document.getElementById('f-team').value;
+  const fDs   = document.getElementById('f-ds').value;
+  const fAe   = document.getElementById('f-ae').value;
+  const fFde  = document.getElementById('f-fde').value;
 
   if (fInd !== activeIndustry) {
     activeIndustry = fInd;
@@ -502,8 +515,10 @@ function applyFilters() {
     if (fType && !d.allTypes.includes(fType)) return false;
     if (fComp === 'complete'   && !d.isComplete) return false;
     if (fComp === 'incomplete' &&  d.isComplete) return false;
-    if (fTeam === 'unassigned-ds' && d.ds) return false;
-    if (fTeam && fTeam !== 'unassigned-ds' && d.ds !== fTeam && d.salesLead !== fTeam && d.fde !== fTeam) return false;
+    if (fDs === 'unassigned-ds' && d.ds) return false;
+    if (fDs && fDs !== 'unassigned-ds' && d.ds !== fDs) return false;
+    if (fAe && d.salesLead !== fAe) return false;
+    if (fFde && d.fde !== fFde) return false;
     return true;
   });
 
@@ -521,15 +536,15 @@ function applyFilters() {
 function renderTable(rows) {
   const tbody = document.getElementById('table-body');
   if (rows.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">🔍</div><p>No outcomes match your filters.</p></div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">ð</div><p>No outcomes match your filters.</p></div></td></tr>`;
     return;
   }
   tbody.innerHTML = rows.map(d => {
     const sfUrl  = `${SF_BASE}/${d.recordId}/view`;
-    const sfLink = `<a href="${sfUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:#F05A28;text-decoration:none;opacity:0.85;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">↗ View in Salesforce</a>`;
+    const sfLink = `<a href="${sfUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:#F05A28;text-decoration:none;opacity:0.85;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">â View in Salesforce</a>`;
 
     const stmtPreview = d.statement
-      ? `<div style="font-size:11px;color:#6b7280;line-height:1.5;margin-top:5px;max-width:300px;">${d.statement.length > 160 ? d.statement.slice(0, 160).trim() + '\u2026' : d.statement}</div>`
+      ? `<div style="font-size:11px;color:#6b7280;line-height:1.5;margin-top:5px;max-width:300px;">${d.statement.length > 160 ? d.statement.slice(0, 160).trim() + 'â¦' : d.statement}</div>`
       : '';
 
     const nameHtml = d.hasName
@@ -542,7 +557,7 @@ function renderTable(rows) {
 
     const typeHtml = d.allTypes.length
       ? d.allTypes.map(t => typeTag(t)).join('')
-      : `<span class="tag tag-missing">—</span>`;
+      : `<span class="tag tag-missing">â</span>`;
 
     const teamLines = [];
     teamLines.push(d.ds
@@ -555,13 +570,13 @@ function renderTable(rows) {
 
     const stageHtml = d.stage
       ? `<span class="tag tag-stage">${d.stage}</span>`
-      : `<span style="color:#d1d5db">—</span>`;
+      : `<span style="color:#d1d5db">â</span>`;
 
-    const dateStr = d.created ? new Date(d.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+    const dateStr = d.created ? new Date(d.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'â';
 
     return `<tr class="${d.isComplete ? '' : 'incomplete'}">
       <td>${nameHtml}</td>
-      <td style="font-weight:500;color:#1a1a2e;white-space:nowrap;">${d.account || '<span style="color:#d1d5db">—</span>'}</td>
+      <td style="font-weight:500;color:#1a1a2e;white-space:nowrap;">${d.account || '<span style="color:#d1d5db">â</span>'}</td>
       <td><span class="tag tag-industry">${d.industry}</span></td>
       <td>${prodHtml}</td>
       <td>${typeHtml}</td>
@@ -584,13 +599,15 @@ function clearFilters() {
   document.getElementById('f-product').value = '';
   document.getElementById('f-type').value = '';
   document.getElementById('f-complete').value = '';
-  document.getElementById('f-team').value = '';
+  document.getElementById('f-ds').value = '';
+  document.getElementById('f-ae').value = '';
+  document.getElementById('f-fde').value = '';
   activeIndustry = '';
   document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
   applyFilters();
 }
 
-// ── Init ──
+// ââ Init ââ
 buildFilters();
 buildIndustryGrid();
 applyFilters();

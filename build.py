@@ -50,32 +50,35 @@ def esc(s):
              .replace('\t', ' '))
 
 def row_to_js(row):
-    record_id    = esc(row.get("OUTCOME_ID", "") or "")
-    name         = esc(row.get("OUTCOME_NAME", "") or "")
-    account      = esc(row.get("ACCOUNT_NAME", "") or "")
-    industry     = esc(row.get("INDUSTRY", "") or "")
+    # Support both new clean aliases and old __C Salesforce field names
+    def g(new_key, old_key=''):
+        v = row.get(new_key) or (row.get(old_key) if old_key else None) or ""
+        return v
+    record_id    = esc(g("OUTCOME_ID",    "RECORD_ID"))
+    name         = esc(g("OUTCOME_NAME",  "NAME"))
+    account      = esc(g("ACCOUNT_NAME"))
+    industry     = esc(g("INDUSTRY",      "INDUSTRY__C"))
     if industry == "Health Care":
         industry = "Healthcare"
-    primary_prod = esc(row.get("PRIMARY_PRODUCT_AREA", "") or "")
-    product      = esc(row.get("PRODUCT", "") or "")
-    type_        = esc(row.get("OUTCOME_TYPE", "") or "")
-    health       = esc(row.get("OUTCOME_HEALTH", "") or "")
-    stage        = esc(row.get("USE_CASE_STAGE", "") or "")
-    created      = (row.get("OUTCOME_CREATED_DATE", "") or "")[:10]
-    ds           = esc(row.get("DEPLOYMENT_STRATEGIST", "") or "")
-    sales_lead   = esc(row.get("SALES_LEAD", "") or "")
-    fde          = esc(row.get("FORWARD_DEPLOYED_ENGINEER", "") or "")
-    statement    = esc(row.get("BUSINESS_OUTCOME_STATEMENT__C", "") or "")
+    primary_prod = esc(g("PRIMARY_PRODUCT_AREA",  "PRIMARY_PRODUCT_AREA__C"))
+    product      = esc(g("PRODUCT",               "PRODUCT__C"))
+    type_        = esc(g("OUTCOME_TYPE",           "BUSINESS_OUTCOME_TYPE__C"))
+    health       = esc(g("OUTCOME_HEALTH",         "HEALTH_STATUS__C"))
+    stage        = esc(g("USE_CASE_STAGE",         "USE_CASE_STAGE__C"))
+    created      = (g("OUTCOME_CREATED_DATE",      "CREATEDDATE"))[:10]
+    ds           = esc(g("DEPLOYMENT_STRATEGIST",  "DEPLOYMENT_STRATEGIST__C"))
+    sales_lead   = esc(g("SALES_LEAD",             "SALES_LEAD__C"))
+    fde          = esc(g("FORWARD_DEPLOYED_ENGINEER", "FORWARD_DEPLOYED_ENGINEER__C"))
+    statement    = esc(g("BUSINESS_OUTCOME_STATEMENT", "BUSINESS_OUTCOME_STATEMENT__C"))
     if name and name.startswith("aLdVt"):
         name = ""
     return (
-        f'  {{ recordId: "{record_id}", name: "{name}", account: "{account}", '
+        f' {{ recordId: "{record_id}", name: "{name}", account: "{account}", '
         f'industry: "{industry}", primaryProduct: "{primary_prod}", product: "{product}", '
         f'type: "{type_}", health: "{health}", stage: "{stage}", created: "{created}", '
         f'ds: "{ds}", salesLead: "{sales_lead}", fde: "{fde}", '
         f'statement: "{statement}" }}'
     )
-
 def build_html(rows):
     with open(TEMPLATE_PATH) as f:
         html = f.read()
@@ -97,6 +100,9 @@ if __name__ == "__main__":
     token = get_api_token()
     print(f"Fetching query {ALATION_QUERY_ID}...")
     rows = fetch_rows(token)
+    if rows:
+        print(f"  COLUMNS: {list(rows[0].keys())}")
+        print(f"  ROW0: {dict(list(rows[0].items())[:5])}")
     print(f"  {len(rows)} outcomes retrieved.")
     print("Building HTML...")
     html = build_html(rows)

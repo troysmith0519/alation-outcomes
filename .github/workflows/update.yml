@@ -30,6 +30,7 @@ jobs:
           ALATION_REFRESH_TOKEN: ${{ secrets.ALATION_REFRESH_TOKEN }}
           ALATION_USER_ID:       ${{ secrets.ALATION_USER_ID }}
           ALATION_QUERY_ID:      ${{ secrets.ALATION_QUERY_ID }}
+          ALATION_RESULT_ID:    "249137"
         run: python build.py
 
       - name: Commit and push if changed

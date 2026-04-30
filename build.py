@@ -16,7 +16,7 @@ TEMPLATE_PATH    = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tem
 # ── Auth ─────────────────────────────────────────────────────────────────────
 def get_api_token():
             resp = requests.post(
-                            f"{ALATION_BASE_URL}/integration/v1/createAPIAccessToken",
+                            f"{ALATION_BASE_URL}/integration/v1/createAPIAccessToken/",
                             json={"refresh_token": REFRESH_TOKEN, "user_id": USER_ID},
                             verify=False
             )

@@ -25,19 +25,25 @@ def get_api_token():
 
 # ── Fetch ─────────────────────────────────────────────────────────────────────
 def fetch_rows(api_token):
-    resp = requests.get(
-        f"{ALATION_BASE_URL}/integration/v1/query/{ALATION_QUERY_ID}/result/latest/",
-        headers={"Token": api_token}, verify=False
-    )
-    resp.raise_for_status()
-    result_id = resp.json()["id"]
+    # If a specific result ID is set (e.g. from a recent manual run), use it directly.
+    # Otherwise fall back to the query's latest cached result.
+    override_id = os.environ.get("ALATION_RESULT_ID", "").strip()
+    if override_id:
+        result_id = int(override_id)
+        print(f"  Using result override: {result_id}")
+    else:
+        resp = requests.get(
+            f"{ALATION_BASE_URL}/integration/v1/query/{ALATION_QUERY_ID}/result/latest/",
+            headers={"Token": api_token}, verify=False
+        )
+        resp.raise_for_status()
+        result_id = resp.json()["id"]
     resp = requests.get(
         f"{ALATION_BASE_URL}/integration/v1/result/{result_id}/csv/",
         headers={"Token": api_token}, verify=False
     )
     resp.raise_for_status()
     return list(csv.DictReader(io.StringIO(resp.text)))
-
 # ── Build ─────────────────────────────────────────────────────────────────────
 def esc(s):
     if not s:

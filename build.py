@@ -92,6 +92,7 @@ if __name__ == "__main__":
     token = get_api_token()
     print(f"Fetching query {ALATION_QUERY_ID}...")
     rows = fetch_rows(token)
+    if rows: print(f"  Columns: {list(rows[0].keys())}")
     print(f"  {len(rows)} outcomes retrieved.")
     print("Building HTML...")
     html = build_html(rows)

@@ -45,21 +45,21 @@ def esc(s):
     return s.replace("\\", "\\\\").replace('"', '\\"')
 
 def row_to_js(row):
-    record_id    = esc(row.get("OUTCOME_ID", "") or "")
-    name         = esc(row.get("OUTCOME_NAME", "") or "")
+    record_id    = esc(row.get("RECORD_ID", "") or "")
+    name         = esc(row.get("NAME", "") or "")
     account      = esc(row.get("ACCOUNT_NAME", "") or "")
-    industry     = esc(row.get("INDUSTRY", "") or "")
+    industry     = esc(row.get("INDUSTRY__C", "") or "")
     if industry == "Health Care":
         industry = "Healthcare"
-    primary_prod = esc(row.get("PRIMARY_PRODUCT_AREA", "") or "")
-    product      = esc(row.get("PRODUCT", "") or "")
-    type_        = esc(row.get("OUTCOME_TYPE", "") or "")
-    health       = esc(row.get("OUTCOME_HEALTH", "") or "")
-    stage        = esc(row.get("USE_CASE_STAGE", "") or "")
-    created      = (row.get("OUTCOME_CREATED_DATE", "") or "")[:10]
-    ds           = esc(row.get("DEPLOYMENT_STRATEGIST", "") or "")
-    sales_lead   = esc(row.get("SALES_LEAD", "") or "")
-    fde          = esc(row.get("FORWARD_DEPLOYED_ENGINEER", "") or "")
+    primary_prod = esc(row.get("PRIMARY_PRODUCT_AREA__C", "") or "")
+    product      = esc(row.get("PRODUCT__C", "") or "")
+    type_        = esc(row.get("BUSINESS_OUTCOME_TYPE__C", "") or "")
+    health       = esc(row.get("HEALTH_STATUS__C", "") or "")
+    stage        = esc(row.get("USE_CASE_STAGE__C", "") or "")
+    created      = (row.get("CREATEDDATE", "") or "")[:10]
+    ds           = esc(row.get("DEPLOYMENT_STRATEGIST__C", "") or "")
+    sales_lead   = esc(row.get("SALES_LEAD__C", "") or "")
+    fde          = esc(row.get("FORWARD_DEPLOYED_ENGINEER__C", "") or "")
     statement    = esc(row.get("BUSINESS_OUTCOME_STATEMENT__C", "") or "")
     if name and name.startswith("aLdVt"):
         name = ""

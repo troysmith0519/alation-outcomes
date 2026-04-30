@@ -324,7 +324,7 @@
     </div>
     <!-- Alert -->
     <div class="alert-banner">
-      <span class="alert-icon">â ï¸</span>
+      <span class="alert-icon">⚠</span>
       <span><strong>9 outcomes have auto-generated names</strong> and <strong>16 are missing product mapping.</strong> These records need to be updated in Salesforce to be fully usable.</span>
     </div>
     <!-- Industry Quick Filter -->
@@ -481,6 +481,23 @@ function buildIndustryGrid() {
   DATA.forEach(d => counts[d.industry] = (counts[d.industry] || 0) + 1);
   const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
   const grid = document.getElementById('industry-grid');
+  // "All Industries" card
+  const allCard = document.createElement('div');
+  allCard.className = 'industry-card active';
+  allCard.id = 'industry-card-all';
+  allCard.innerHTML = `
+    <div class="i-name">All Industries</div>
+    <div class="i-count">${DATA.length}</div>
+    <div class="i-sub">outcomes</div>
+  `;
+  allCard.onclick = () => {
+    activeIndustry = '';
+    document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
+    allCard.classList.add('active');
+    document.getElementById('f-industry').value = '';
+    applyFilters();
+  };
+  grid.appendChild(allCard);
   sorted.forEach(([industry, count]) => {
     const card = document.createElement('div');
     card.className = 'industry-card';
@@ -495,6 +512,8 @@ function buildIndustryGrid() {
         activeIndustry = '';
         card.classList.remove('active');
         document.getElementById('f-industry').value = '';
+        const allCard = document.getElementById('industry-card-all');
+        if (allCard) allCard.classList.add('active');
       } else {
         activeIndustry = industry;
         document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
@@ -633,6 +652,8 @@ function clearFilters() {
   document.getElementById('f-fde').value = '';
   activeIndustry = '';
   document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
+  const allCard = document.getElementById('industry-card-all');
+  if (allCard) allCard.classList.add('active');
   applyFilters();
 }
 

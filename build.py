@@ -42,7 +42,12 @@ def fetch_rows(api_token):
 def esc(s):
     if not s:
         return ""
-    return s.replace("\\", "\\\\").replace('"', '\\"')
+    return (s.replace("\\", "\\\\")
+             .replace('"', '\\"')
+             .replace('\r\n', ' ')
+             .replace('\n', ' ')
+             .replace('\r', ' ')
+             .replace('\t', ' '))
 
 def row_to_js(row):
     record_id    = esc(row.get("OUTCOME_ID", "") or "")

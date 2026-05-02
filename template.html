@@ -350,7 +350,7 @@
       </select>
       <select class="filter-select" id="f-ds" onchange="applyFilters()">
         <option value="">All DS</option>
-        <option value="unassigned-ds">No DS Assigned</option>
+    2   <option value="unassigned-ds">No DS Assigned</option>
       </select>
       <select class="filter-select" id="f-ae" onchange="applyFilters()">
         <option value="">All AE</option>
@@ -633,5 +633,272 @@ buildFilters();
 buildIndustryGrid();
 applyFilters();
 </script>
+<!-- ── Outcomes Advisor Chat Widget ──────────────────────────────────
+     Additive: appended before </body>. No existing HTML, CSS, or JS modified.
+     To connect to the Outcomes Advisor agent, update ADVISOR_URL below
+     to the direct URL of the agent in Alation Agent Studio.
+─────────────────────────────────────────────────────────────────── -->
+<style>
+  #adv-btn {
+    position: fixed; bottom: 28px; right: 28px;
+    background: #F05A28; color: white; border: none;
+    border-radius: 28px; padding: 13px 22px;
+    font-size: 14px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 4px 20px rgba(240,90,40,0.4);
+    display: flex; align-items: center; gap: 8px;
+    z-index: 10000; transition: transform 0.15s, box-shadow 0.15s;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  #adv-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(240,90,40,0.5); }
+  #adv-btn.adv-hidden { display: none; }
+
+  #adv-panel {
+    position: fixed; bottom: 28px; right: 28px;
+    width: 400px; max-height: 600px;
+    background: white; border-radius: 16px;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.18);
+    display: none; flex-direction: column;
+    z-index: 10000; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    border: 1px solid rgba(0,0,0,0.08);
+    animation: advSlideUp 0.2s ease;
+  }
+  #adv-panel.adv-open { display: flex; }
+  @keyframes advSlideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  #adv-header {
+    background: #1a1a2e; padding: 16px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  #adv-header-left { display: flex; align-items: center; gap: 10px; }
+  #adv-logo {
+    width: 30px; height: 30px; background: #F05A28; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 900; color: white;
+  }
+  #adv-title { font-size: 14px; font-weight: 700; color: white; }
+  #adv-subtitle { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+  #adv-close {
+    background: rgba(255,255,255,0.1); border: none; color: white;
+    font-size: 20px; width: 28px; height: 28px; border-radius: 6px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s; line-height: 1; padding: 0;
+    font-family: inherit;
+  }
+  #adv-close:hover { background: rgba(255,255,255,0.2); }
+
+  #adv-ctx-bar {
+    padding: 9px 16px; background: #f8f9fa; border-bottom: 1px solid #f0f0f0;
+    font-size: 11px; color: #6b7280; flex-shrink: 0;
+    display: none; align-items: center; gap: 5px; flex-wrap: wrap;
+  }
+  #adv-ctx-bar.adv-visible { display: flex; }
+  .adv-ctx-chip {
+    background: #eff6ff; color: #1d4ed8;
+    padding: 2px 8px; border-radius: 10px;
+    font-size: 11px; font-weight: 600;
+  }
+
+  #adv-body {
+    padding: 16px; overflow-y: auto; flex: 1;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  #adv-sug-label {
+    font-size: 10px; font-weight: 700; color: #9ca3af;
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
+  }
+  #adv-suggestions { display: flex; flex-wrap: wrap; gap: 6px; }
+  .adv-sug {
+    background: #f4f5f7; border: 1px solid #e5e7eb;
+    border-radius: 14px; padding: 5px 12px;
+    font-size: 12px; color: #374151; cursor: pointer;
+    transition: all 0.15s; font-family: inherit; text-align: left;
+  }
+  .adv-sug:hover { background: #fff4f0; border-color: #F05A28; color: #F05A28; }
+
+  #adv-input {
+    width: 100%; padding: 11px 13px;
+    border: 1.5px solid #e5e7eb; border-radius: 10px;
+    font-size: 13px; font-family: inherit; resize: none; outline: none;
+    line-height: 1.5; color: #1a1a2e; transition: border-color 0.2s;
+    min-height: 80px; box-sizing: border-box;
+  }
+  #adv-input:focus { border-color: #F05A28; }
+  #adv-input::placeholder { color: #9ca3af; }
+
+  #adv-footer {
+    padding: 12px 16px; border-top: 1px solid #f0f0f0;
+    display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
+  }
+  #adv-submit {
+    background: #F05A28; color: white; border: none;
+    border-radius: 8px; padding: 11px 16px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: background 0.15s; font-family: inherit;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  #adv-submit:hover { background: #d94e20; }
+  #adv-copied {
+    font-size: 12px; color: #15803d; text-align: center;
+    font-weight: 600; display: none;
+  }
+  #adv-hint { font-size: 11px; color: #9ca3af; text-align: center; line-height: 1.45; }
+</style>
+
+<script>
+(function() {
+  // ── Config: set ADVISOR_URL to the direct link for the Outcomes Advisor agent ──
+  const ADVISOR_URL = 'https://aaa.alationcloud.com/';
+
+  const SUGGESTIONS = [
+    'What outcomes exist for financial services?',
+    'Show me successful Agent Studio use cases',
+    'What are the strongest healthcare outcomes?',
+    'Help me build an outcome for a new customer',
+    'Which outcomes are missing product mapping?',
+    'What outcomes does Troy Smith own?',
+  ];
+
+  // ── Inject HTML ──
+  const wrapper = document.createElement('div');
+  wrapper.id = 'adv-widget';
+  wrapper.innerHTML = `
+    <button id="adv-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink:0" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3C7.03 3 3 6.58 3 11c0 2.4 1.18 4.55 3 6.02V21l3.7-2.12c.74.17 1.51.26 2.3.26 4.97 0 9-3.58 9-8s-4.03-8-9-8zm1 11H11v-2h2v2zm0-4H11V7h2v3z" fill="white"/>
+      </svg>
+      Ask Advisor
+    </button>
+    <div id="adv-panel">
+      <div id="adv-header">
+        <div id="adv-header-left">
+          <div id="adv-logo">A</div>
+          <div>
+            <div id="adv-title">Outcomes Advisor</div>
+            <div id="adv-subtitle">Powered by Alation Agent Studio</div>
+          </div>
+        </div>
+        <button id="adv-close" title="Close">&times;</button>
+      </div>
+      <div id="adv-ctx-bar">
+        <span style="color:#9ca3af">Viewing:</span>
+        <span id="adv-ctx-chips"></span>
+      </div>
+      <div id="adv-body">
+        <div>
+          <div id="adv-sug-label">Try asking</div>
+          <div id="adv-suggestions"></div>
+        </div>
+        <textarea id="adv-input" rows="3"
+          placeholder="What outcomes exist for [industry]? Which Agent Studio use cases have worked? Help me build an outcome for..."></textarea>
+      </div>
+      <div id="adv-footer">
+        <button id="adv-submit">Open Advisor in Alation &rarr;</button>
+        <div id="adv-copied">&#10003; Prompt copied &mdash; paste it into Agent Studio</div>
+        <div id="adv-hint">Opens Alation in a new tab.<br>Your question + current filter context are copied to your clipboard.</div>
+      </div>
+    </div>
+  \`;
+  document.body.appendChild(wrapper);
+
+  // ── Suggestions ──
+  const sugEl = document.getElementById('adv-suggestions');
+  SUGGESTIONS.forEach(text => {
+    const b = document.createElement('button');
+    b.className = 'adv-sug';
+    b.textContent = text;
+    b.onclick = () => {
+      document.getElementById('adv-input').value = text;
+      document.getElementById('adv-input').focus();
+    };
+    sugEl.appendChild(b);
+  });
+
+  // ── Context reading ──
+  function getCtx() {
+    const chips = [];
+    const ind  = document.getElementById('f-industry')?.value;
+    const prod = document.getElementById('f-product')?.value;
+    const type = document.getElementById('f-type')?.value;
+    const ds   = document.getElementById('f-ds')?.value;
+    const ae   = document.getElementById('f-ae')?.value;
+    const cnt  = document.getElementById('results-count')?.textContent || '';
+    if (ind)  chips.push(ind);
+    if (prod) chips.push(prod);
+    if (type) chips.push(type);
+    if (ds && ds !== 'unassigned-ds') chips.push('DS: ' + ds);
+    if (ae)   chips.push('AE: ' + ae);
+    return { chips, cnt };
+  }
+
+  function updateCtxBar() {
+    const { chips } = getCtx();
+    const bar     = document.getElementById('adv-ctx-bar');
+    const chipsEl = document.getElementById('adv-ctx-chips');
+    if (chips.length) {
+      chipsEl.innerHTML = chips.map(c => `<span class="adv-ctx-chip">${c}</span>`).join(' ');
+      bar.classList.add('adv-visible');
+    } else {
+      bar.classList.remove('adv-visible');
+    }
+  }
+
+  function buildPrompt(question) {
+    const { chips, cnt } = getCtx();
+    let p = '';
+    if (chips.length) {
+      p += 'Context: I am viewing the Business Outcomes Library, currently filtered to: ' + chips.join(', ') + '.';
+      if (cnt) p += ' ' + cnt + '.';
+      p += '\n\n';
+    } else {
+      p += 'Context: I am viewing the full Business Outcomes Library (no filters active).\n\n';
+    }
+    p += 'Question: ' + question;
+    return p;
+  }
+
+  // ── Toggle ──
+  function openPanel() {
+    document.getElementById('adv-btn').classList.add('adv-hidden');
+    document.getElementById('adv-panel').classList.add('adv-open');
+    document.getElementById('adv-copied').style.display = 'none';
+    updateCtxBar();
+    setTimeout(() => document.getElementById('adv-input').focus(), 50);
+  }
+  function closePanel() {
+    document.getElementById('adv-btn').classList.remove('adv-hidden');
+    document.getElementById('adv-panel').classList.remove('adv-open');
+  }
+
+  document.getElementById('adv-btn').onclick   = openPanel;
+  document.getElementById('adv-close').onclick = closePanel;
+
+  // ── Submit ──
+  document.getElementById('adv-submit').onclick = async function() {
+    const q = document.getElementById('adv-input').value.trim();
+    if (!q) { document.getElementById('adv-input').focus(); return; }
+    const prompt = buildPrompt(q);
+    try {
+      await navigator.clipboard.writeText(prompt);
+      document.getElementById('adv-copied').style.display = 'block';
+      setTimeout(() => { document.getElementById('adv-copied').style.display = 'none'; }, 5000);
+    } catch(e) { /* clipboard unavailable — tab still opens */ }
+    window.open(ADVISOR_URL, '_blank');
+  };
+
+  // Cmd/Ctrl+Enter shortcut
+  document.getElementById('adv-input').addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      document.getElementById('adv-submit').click();
+    }
+  });
+
+})();
+</script>
+
 </body>
 </html>

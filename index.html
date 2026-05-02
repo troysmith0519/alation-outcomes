@@ -670,7 +670,7 @@ applyFilters();
 ─────────────────────────────────────────────────────────────────── -->
 <style>
   #adv-btn {
-    position: fixed; bottom: 28px; right: 28px;
+    position: fixed; top: 16px; right: 16px;
     background: #F05A28; color: white; border: none;
     border-radius: 28px; padding: 13px 22px;
     font-size: 14px; font-weight: 700; cursor: pointer;
@@ -679,11 +679,11 @@ applyFilters();
     z-index: 10000; transition: transform 0.15s, box-shadow 0.15s;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
-  #adv-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(240,90,40,0.5); }
+  #adv-btn:hover { transform: translateY(2px); box-shadow: 0 6px 28px rgba(240,90,40,0.5); }
   #adv-btn.adv-hidden { display: none; }
 
   #adv-panel {
-    position: fixed; bottom: 28px; right: 28px;
+    position: fixed; top: 60px; right: 16px;
     width: 400px; max-height: 600px;
     background: white; border-radius: 16px;
     box-shadow: 0 16px 64px rgba(0,0,0,0.18);
@@ -785,7 +785,7 @@ applyFilters();
   const ADVISOR_URL = 'https://aaa.alationcloud.com/app/studio/agents/a/b9798455-2546-403c-9503-9f6a55d1db04';
 
   const SUGGESTIONS = [
-    'What outcomes exist for financial services=',
+    'What outcomes exist for financial services?',
     'Show me successful Agent Studio use cases',
     'What are the strongest healthcare outcomes?',
     'Help me build an outcome for a new customer',
@@ -832,7 +832,7 @@ applyFilters();
         <div id="adv-hint">Opens Alation in a new tab.<br>Your question + current filter context are copied to your clipboard.</div>
       </div>
     </div>
-  \`;
+  `;
   document.body.appendChild(wrapper);
 
   // ── Suggestions ──

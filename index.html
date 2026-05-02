@@ -735,8 +735,14 @@ applyFilters();
 
   #adv-body {
     padding: 16px; overflow-y: auto; flex: 1;
-    display: flex; flex-direction: column; gap: 14px;
+    display: flex; flex-direction: column; gap: 12px;
   }
+  #adv-instructions {
+    font-size: 12px; color: #6b7280; line-height: 1.5;
+    background: #f8f9fa; border-radius: 8px; padding: 10px 12px;
+    border-left: 3px solid #F05A28;
+  }
+  #adv-instructions strong { color: #1a1a2e; }
   #adv-sug-label {
     font-size: 10px; font-weight: 700; color: #9ca3af;
     text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
@@ -744,34 +750,35 @@ applyFilters();
   #adv-suggestions { display: flex; flex-wrap: wrap; gap: 6px; }
   .adv-sug {
     background: #f4f5f7; border: 1px solid #e5e7eb;
-    border-radius: 14px; padding: 5px 12px;
+    border-radius: 14px; padding: 6px 13px;
     font-size: 12px; color: #374151; cursor: pointer;
     transition: all 0.15s; font-family: inherit; text-align: left;
+    display: flex; align-items: center; gap: 5px;
   }
+  .adv-sug::before { content: '\u2197'; font-size: 10px; color: #9ca3af; flex-shrink: 0; }
   .adv-sug:hover { background: #fff4f0; border-color: #F05A28; color: #F05A28; }
+  .adv-sug:hover::before { color: #F05A28; }
 
-  #adv-input {
-    width: 100%; padding: 11px 13px;
-    border: 1.5px solid #e5e7eb; border-radius: 10px;
-    font-size: 13px; font-family: inherit; resize: none; outline: none;
-    line-height: 1.5; color: #1a1a2e; transition: border-color 0.2s;
-    min-height: 80px; box-sizing: border-box;
+  #adv-divider {
+    text-align: center; font-size: 11px; color: #d1d5db;
+    display: flex; align-items: center; gap: 8px;
   }
-  #adv-input:focus { border-color: #F05A28; }
-  #adv-input::placeholder { color: #9ca3af; }
+  #adv-divider::before, #adv-divider::after {
+    content: ''; flex: 1; height: 1px; background: #e5e7eb;
+  }
 
   #adv-footer {
     padding: 12px 16px; border-top: 1px solid #f0f0f0;
-    display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
+    display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;
   }
-  #adv-submit {
-    background: #F05A28; color: white; border: none;
-    border-radius: 8px; padding: 11px 16px;
-    font-size: 14px; font-weight: 600; cursor: pointer;
-    transition: background 0.15s; font-family: inherit;
+  #adv-open {
+    background: white; color: #374151; border: 1.5px solid #e5e7eb;
+    border-radius: 8px; padding: 10px 16px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: all 0.15s; font-family: inherit;
     display: flex; align-items: center; justify-content: center; gap: 6px;
   }
-  #adv-submit:hover { background: #d94e20; }
+  #adv-open:hover { border-color: #F05A28; color: #F05A28; background: #fff4f0; }
   #adv-hint { font-size: 11px; color: #9ca3af; text-align: center; line-height: 1.45; }
 
   #adv-toast {
@@ -825,16 +832,19 @@ applyFilters();
         <span id="adv-ctx-chips"></span>
       </div>
       <div id="adv-body">
+        <div id="adv-instructions">
+          <strong>Click any question</strong> to copy your prompt and open Advisor &mdash; then paste it into the chat.<br>
+          Or use the button below to open Advisor and ask your own question directly.
+        </div>
         <div>
-          <div id="adv-sug-label">Try asking</div>
+          <div id="adv-sug-label">Select a question to launch</div>
           <div id="adv-suggestions"></div>
         </div>
-        <textarea id="adv-input" rows="3"
-          placeholder="What outcomes exist for [industry]? Which Agent Studio use cases have worked? Help me build an outcome for..."></textarea>
+        <div id="adv-divider">or</div>
       </div>
       <div id="adv-footer">
-        <button id="adv-submit">Open in Advisor &rarr;</button>
-        <div id="adv-hint">Copies your prompt &amp; opens Advisor in a new tab.<br>Or click any suggestion above to launch instantly.</div>
+        <button id="adv-open">Open Advisor with your own question &rarr;</button>
+        <div id="adv-hint">Opens Advisor in a new tab. Type your question directly in the chat.</div>
       </div>
     </div>
   `;
@@ -920,7 +930,6 @@ applyFilters();
     document.getElementById('adv-btn').classList.add('adv-hidden');
     document.getElementById('adv-panel').classList.add('adv-open');
     updateCtxBar();
-    setTimeout(() => document.getElementById('adv-input').focus(), 50);
   }
   function closePanel() {
     document.getElementById('adv-btn').classList.remove('adv-hidden');
@@ -930,23 +939,13 @@ applyFilters();
   document.getElementById('adv-btn').onclick   = openPanel;
   document.getElementById('adv-close').onclick = closePanel;
 
-  // ── Submit ──
-  document.getElementById('adv-submit').onclick = async function() {
-    const q = document.getElementById('adv-input').value.trim();
-    if (!q) { document.getElementById('adv-input').focus(); return; }
-    const prompt = buildPrompt(q);
-    try { await navigator.clipboard.writeText(prompt); } catch(e) {}
+  // ── Open Advisor (custom question) ──
+  document.getElementById('adv-open').onclick = function() {
     window.open(ADVISOR_URL, '_blank');
     closePanel();
-    showToast('\u2713 Opening Advisor \u2014 paste your prompt to get started');
   };
 
-  // Cmd/Ctrl+Enter shortcut
-  document.getElementById('adv-input').addEventListener('keydown', function(e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      document.getElementById('adv-submit').click();
-    }
-  });
+
 
 })();
 </script>

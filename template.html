@@ -6,221 +6,120 @@
   <title>Alation Business Outcomes Library</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f4f5f7;
-      color: #1a1a2e;
-      min-height: 100vh;
-    }
-    /* ââ Password Gate ââ */
-    #gate {
-      position: fixed; inset: 0;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 9999;
-    }
-    .gate-card {
-      background: white;
-      border-radius: 16px;
-      padding: 48px 40px;
-      width: 100%; max-width: 400px;
-      text-align: center;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
-    }
-    .gate-logo {
-      width: 48px; height: 48px;
-      background: #F05A28;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 20px;
-      font-size: 24px; font-weight: 900; color: white;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
+
+    /* ── Password Gate ── */
+    #gate { position: fixed; inset: 0; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    .gate-card { background: white; border-radius: 16px; padding: 48px 40px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 24px 64px rgba(0,0,0,0.4); }
+    .gate-logo { width: 48px; height: 48px; background: #F05A28; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 24px; font-weight: 900; color: white; }
     .gate-card h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
     .gate-card p { font-size: 14px; color: #6b7280; margin-bottom: 28px; }
-    .gate-input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 2px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 16px;
-      outline: none;
-      transition: border-color 0.2s;
-      margin-bottom: 12px;
-      text-align: center;
-      letter-spacing: 2px;
-    }
+    .gate-input { width: 100%; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.2s; margin-bottom: 12px; text-align: center; letter-spacing: 2px; }
     .gate-input:focus { border-color: #F05A28; }
-    .gate-btn {
-      width: 100%;
-      padding: 13px;
-      background: #F05A28;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
+    .gate-btn { width: 100%; padding: 13px; background: #F05A28; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
     .gate-btn:hover { background: #d94e20; }
-    .gate-error {
-      color: #ef4444;
-      font-size: 13px;
-      margin-top: 10px;
-      display: none;
-    }
-    /* ââ Main App ââ */
+    .gate-error { color: #ef4444; font-size: 13px; margin-top: 10px; display: none; }
+
+    /* ── Main App ── */
     #app { display: none; }
-    header {
-      background: white;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 0 32px;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
+    header { background: white; border-bottom: 1px solid #e5e7eb; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
     .header-left { display: flex; align-items: center; gap: 12px; }
-    .logo-mark {
-      width: 36px; height: 36px;
-      background: #F05A28;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 900; color: white;
-    }
+    .logo-mark { width: 36px; height: 36px; background: #F05A28; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: white; }
     .header-title { font-size: 17px; font-weight: 700; color: #1a1a2e; }
     .header-sub { font-size: 12px; color: #9ca3af; margin-top: 1px; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
     .header-meta { font-size: 12px; color: #9ca3af; }
-    .main { max-width: 1400px; margin: 0 auto; padding: 28px 32px; }
-    /* ââ Stats Cards ââ */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 24px;
+
+    /* ── Plugin Button (header) ── */
+    .plugin-header-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #F05A28;
+      color: white;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(240,90,40,0.3);
     }
-    .stat-card {
-      background: white;
+    .plugin-header-btn:hover { background: #d94e20; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(240,90,40,0.45); }
+
+    /* ── Plugin Callout Banner ── */
+    .plugin-callout {
+      background: linear-gradient(135deg, #1a1a2e 0%, #0f2547 100%);
       border-radius: 12px;
-      padding: 20px 24px;
-      border: 1px solid #e5e7eb;
+      padding: 22px 28px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
     }
+    .plugin-callout-content { display: flex; align-items: center; gap: 18px; }
+    .plugin-callout-icon {
+      width: 46px; height: 46px;
+      background: rgba(240,90,40,0.18);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .plugin-callout-title { font-size: 15px; font-weight: 700; color: white; margin-bottom: 5px; }
+    .plugin-callout-desc { font-size: 13px; color: rgba(255,255,255,0.62); line-height: 1.55; max-width: 560px; }
+    .plugin-callout-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; flex-shrink: 0; }
+    .plugin-download-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #F05A28; color: white; text-decoration: none;
+      padding: 11px 22px; border-radius: 8px;
+      font-size: 14px; font-weight: 700; white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .plugin-download-btn:hover { background: #d94e20; transform: translateY(-1px); }
+    .plugin-callout-hint { font-size: 11px; color: rgba(255,255,255,0.38); text-align: right; }
+
+    .main { max-width: 1400px; margin: 0 auto; padding: 28px 32px; }
+
+    /* ── Stats Cards ── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card { background: white; border-radius: 12px; padding: 20px 24px; border: 1px solid #e5e7eb; }
     .stat-label { font-size: 12px; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
     .stat-value { font-size: 36px; font-weight: 800; color: #1a1a2e; margin: 4px 0 2px; line-height: 1; }
     .stat-value.orange { color: #F05A28; }
     .stat-sub { font-size: 12px; color: #9ca3af; }
-    /* ââ Alert Banner ââ */
-    .alert-banner {
-      background: #fff8f0;
-      border: 1px solid #fed7aa;
-      border-radius: 10px;
-      padding: 12px 18px;
-      margin-bottom: 20px;
-      display: flex; align-items: center; gap: 10px;
-      font-size: 13px; color: #92400e;
-    }
+
+    /* ── Alert Banner ── */
+    .alert-banner { background: #fff8f0; border: 1px solid #fed7aa; border-radius: 10px; padding: 12px 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #92400e; }
     .alert-icon { font-size: 16px; flex-shrink: 0; }
-    /* ââ Filters ââ */
-    .filters-bar {
-      background: white;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-    }
+
+    /* ── Filters ── */
+    .filters-bar { background: white; border-radius: 12px; border: 1px solid #e5e7eb; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .filter-label { font-size: 12px; font-weight: 600; color: #6b7280; white-space: nowrap; }
-    .filter-select, .search-input {
-      padding: 8px 12px;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #1a1a2e;
-      background: #f9fafb;
-      outline: none;
-      transition: border-color 0.2s;
-      cursor: pointer;
-    }
+    .filter-select, .search-input { padding: 8px 12px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 13px; color: #1a1a2e; background: #f9fafb; outline: none; transition: border-color 0.2s; cursor: pointer; }
     .filter-select:focus, .search-input:focus { border-color: #F05A28; background: white; }
     .search-input { flex: 1; min-width: 200px; }
-    .filter-clear {
-      padding: 8px 14px;
-      background: #f3f4f6;
-      border: none;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      color: #6b7280;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
+    .filter-clear { padding: 8px 14px; background: #f3f4f6; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; color: #6b7280; cursor: pointer; transition: all 0.15s; }
     .filter-clear:hover { background: #e5e7eb; color: #374151; }
-    .results-count {
-      margin-left: auto;
-      font-size: 12px;
-      color: #9ca3af;
-      white-space: nowrap;
-    }
-    /* ââ Table ââ */
-    .table-wrap {
-      background: white;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      overflow: hidden;
-    }
+    .results-count { margin-left: auto; font-size: 12px; color: #9ca3af; white-space: nowrap; }
+
+    /* ── Table ── */
+    .table-wrap { background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; }
-    thead th {
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #6b7280;
-      background: #f9fafb;
-      border-bottom: 1px solid #e5e7eb;
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
-    }
+    thead th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; background: #f9fafb; border-bottom: 1px solid #e5e7eb; cursor: pointer; user-select: none; white-space: nowrap; }
     thead th:hover { color: #F05A28; }
     thead th.sorted { color: #F05A28; }
-    tbody tr {
-      border-bottom: 1px solid #f3f4f6;
-      transition: background 0.1s;
-    }
+    tbody tr { border-bottom: 1px solid #f3f4f6; transition: background 0.1s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: #fafafa; }
     tbody tr.incomplete { background: #fffbf5; }
     tbody tr.incomplete:hover { background: #fff8f0; }
-    td {
-      padding: 13px 16px;
-      font-size: 13px;
-      color: #374151;
-      vertical-align: top;
-    }
+    td { padding: 13px 16px; font-size: 13px; color: #374151; vertical-align: top; }
     .outcome-name { font-weight: 600; color: #1a1a2e; max-width: 280px; line-height: 1.4; }
     .incomplete-name { color: #9ca3af; font-style: italic; font-weight: 400; }
-    .incomplete-badge {
-      display: inline-block;
-      background: #fef3c7;
-      color: #92400e;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-top: 4px;
-      letter-spacing: 0.04em;
-    }
-    .tag {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      margin: 2px 2px 2px 0;
-      white-space: nowrap;
-    }
+    .incomplete-badge { display: inline-block; background: #fef3c7; color: #92400e; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-top: 4px; letter-spacing: 0.04em; }
+    .tag { display: inline-block; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; margin: 2px 2px 2px 0; white-space: nowrap; }
     .tag-industry { background: #eff6ff; color: #1d4ed8; }
     .tag-product { background: #f0fdf4; color: #15803d; }
     .tag-type-money { background: #fef9c3; color: #854d0e; }
@@ -229,52 +128,25 @@
     .tag-stage { background: #e0f2fe; color: #0369a1; }
     .tag-missing { background: #f3f4f6; color: #9ca3af; font-style: italic; }
     .date-cell { color: #9ca3af; font-size: 12px; white-space: nowrap; }
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: #9ca3af;
-    }
+    .empty-state { text-align: center; padding: 60px 20px; color: #9ca3af; }
     .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
     .empty-state p { font-size: 14px; }
-    /* ââ Industry Summary ââ */
-    .section-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #1a1a2e;
-      margin: 28px 0 14px;
-    }
-    .industry-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-    .industry-card {
-      background: white;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      padding: 14px 18px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .industry-card:hover, .industry-card.active {
-      border-color: #F05A28;
-      box-shadow: 0 0 0 3px rgba(240,90,40,0.08);
-    }
+
+    /* ── Industry Summary ── */
+    .section-title { font-size: 14px; font-weight: 700; color: #1a1a2e; margin: 28px 0 14px; }
+    .industry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 32px; }
+    .industry-card { background: white; border-radius: 10px; border: 1px solid #e5e7eb; padding: 14px 18px; cursor: pointer; transition: all 0.15s; }
+    .industry-card:hover, .industry-card.active { border-color: #F05A28; box-shadow: 0 0 0 3px rgba(240,90,40,0.08); }
     .industry-card .i-name { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
     .industry-card .i-count { font-size: 28px; font-weight: 800; color: #F05A28; line-height: 1; }
     .industry-card .i-sub { font-size: 11px; color: #9ca3af; margin-top: 2px; }
-    footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: #d1d5db;
-    }
+
+    footer { text-align: center; padding: 24px; font-size: 12px; color: #d1d5db; }
   </style>
 </head>
 <body>
 
-<!-- ââ Password Gate ââ -->
+<!-- ── Password Gate ── -->
 <div id="gate">
   <div class="gate-card">
     <div class="gate-logo">A</div>
@@ -286,7 +158,7 @@
   </div>
 </div>
 
-<!-- ââ Main App ââ -->
+<!-- ── Main App ── -->
 <div id="app">
   <header>
     <div class="header-left">
@@ -296,9 +168,39 @@
         <div class="header-sub">Alation Internal &middot; Valhalla/Salesforce</div>
       </div>
     </div>
-    <div class="header-meta">Last refreshed: April 29, 2026</div>
+    <div class="header-right">
+      <div class="header-meta">Last refreshed: April 29, 2026</div>
+      <a class="plugin-header-btn" href="https://troysmith0519.github.io/alation-outcomes/alation-outcomes-advisor.plugin" download="alation-outcomes-advisor.plugin">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-6 2h12v2H6v-2z"/></svg>
+        Get the Plugin
+      </a>
+    </div>
   </header>
+
   <div class="main">
+
+    <!-- Plugin Install Callout -->
+    <div class="plugin-callout">
+      <div class="plugin-callout-content">
+        <div class="plugin-callout-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z" fill="#F05A28"/>
+          </svg>
+        </div>
+        <div>
+          <div class="plugin-callout-title">Browse here. Build in Claude.</div>
+          <div class="plugin-callout-desc">Use the Outcomes Advisor plugin to dig deeper into existing outcomes, draft new ones for your customers, and create strategy working session docs and decks — directly inside Claude.</div>
+        </div>
+      </div>
+      <div class="plugin-callout-actions">
+        <a class="plugin-download-btn" href="https://troysmith0519.github.io/alation-outcomes/alation-outcomes-advisor.plugin" download="alation-outcomes-advisor.plugin">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-6 2h12v2H6v-2z"/></svg>
+          Download Plugin
+        </a>
+        <div class="plugin-callout-hint">Requires Claude &middot; Cowork mode</div>
+      </div>
+    </div>
+
     <!-- Stats -->
     <div class="stats-row">
       <div class="stat-card">
@@ -322,14 +224,17 @@
         <div class="stat-sub">missing product or name</div>
       </div>
     </div>
+
     <!-- Alert -->
     <div class="alert-banner">
-      <span class="alert-icon">⚠</span>
+      <span class="alert-icon">&#9888;</span>
       <span><strong>9 outcomes have auto-generated names</strong> and <strong>16 are missing product mapping.</strong> These records need to be updated in Salesforce to be fully usable.</span>
     </div>
+
     <!-- Industry Quick Filter -->
     <div class="section-title">Filter by Industry</div>
     <div class="industry-grid" id="industry-grid"></div>
+
     <!-- Filters Bar -->
     <div class="filters-bar">
       <span class="filter-label">Filter:</span>
@@ -350,7 +255,7 @@
       </select>
       <select class="filter-select" id="f-ds" onchange="applyFilters()">
         <option value="">All DS</option>
-    2   <option value="unassigned-ds">No DS Assigned</option>
+        <option value="unassigned-ds">No DS Assigned</option>
       </select>
       <select class="filter-select" id="f-ae" onchange="applyFilters()">
         <option value="">All AE</option>
@@ -361,6 +266,7 @@
       <button class="filter-clear" onclick="clearFilters()">Clear filters</button>
       <span class="results-count" id="results-count"></span>
     </div>
+
     <!-- Table -->
     <div class="table-wrap">
       <table>
@@ -379,540 +285,232 @@
         <tbody id="table-body"></tbody>
       </table>
     </div>
+
     <footer>Alation Confidential &middot; Last refreshed: DATA_LAST_REFRESHED</footer>
   </div>
 </div>
 
 <script>
-// ââ Auth ââ
-const PASSWORD = "Alation2026!";
-function checkPwd() {
-  const val = document.getElementById('pwd-input').value;
-  if (val === PASSWORD) {
-    document.getElementById('gate').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-  } else {
-    const err = document.getElementById('pwd-error');
-    err.style.display = 'block';
-    document.getElementById('pwd-input').value = '';
-    document.getElementById('pwd-input').focus();
-    setTimeout(() => err.style.display = 'none', 3000);
+  // ── Auth ──
+  const PASSWORD = "Alation2026!";
+  function checkPwd() {
+    const val = document.getElementById('pwd-input').value;
+    if (val === PASSWORD) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+    } else {
+      const err = document.getElementById('pwd-error');
+      err.style.display = 'block';
+      document.getElementById('pwd-input').value = '';
+      document.getElementById('pwd-input').focus();
+      setTimeout(() => err.style.display = 'none', 3000);
+    }
   }
-}
 
-const SF_BASE = "https://alation.lightning.force.com/lightning/r/Business_Outcome__c";
-const RAW = DATA_PLACEHOLDER;
+  const SF_BASE = "https://alation.lightning.force.com/lightning/r/Business_Outcome__c";
+  const RAW = DATA_PLACEHOLDER;
 
-// Normalize and compute fields
-const DATA = RAW.map((r, i) => {
-  const products = [r.primaryProduct, r.product].filter(Boolean).join(';');
-  const allProducts = products ? [...new Set(products.split(';').map(p => p.trim()).filter(Boolean))] : [];
-  const allTypes = r.type ? r.type.split(';').map(t => t.trim()).filter(Boolean) : [];
-  const hasName = Boolean(r.name && r.name.trim());
-  const hasProduct = allProducts.length > 0;
-  const isComplete = hasName && hasProduct;
-  return { ...r, id: i, allProducts, allTypes, hasName, hasProduct, isComplete, displayName: hasName ? r.name : '(Unnamed â needs update)' };
-});
-
-// ââ State ââ
-let sortField = 'created';
-let sortDir = 1;
-let activeIndustry = '';
-
-// ââ Build filter options ââ
-function buildFilters() {
-  const industries = [...new Set(DATA.map(d => d.industry))].sort();
-  const products = [...new Set(DATA.flatMap(d => d.allProducts))].sort();
-  const types = [...new Set(DATA.flatMap(d => d.allTypes))].sort();
-  const dsSet = new Set();
-  const aeSet = new Set();
-  const fdeSet = new Set();
-  DATA.forEach(d => {
-    if (d.ds) dsSet.add(d.ds);
-    if (d.salesLead) aeSet.add(d.salesLead);
-    if (d.fde) fdeSet.add(d.fde);
+  // Normalize and compute fields
+  const DATA = RAW.map((r, i) => {
+    const products = [r.primaryProduct, r.product].filter(Boolean).join(';');
+    const allProducts = products ? [...new Set(products.split(';').map(p => p.trim()).filter(Boolean))] : [];
+    const allTypes = r.type ? r.type.split(';').map(t => t.trim()).filter(Boolean) : [];
+    const hasName = Boolean(r.name && r.name.trim());
+    const hasProduct = allProducts.length > 0;
+    const isComplete = hasName && hasProduct;
+    return { ...r, id: i, allProducts, allTypes, hasName, hasProduct, isComplete, displayName: hasName ? r.name : '(Unnamed – needs update)' };
   });
-  const iSel = document.getElementById('f-industry');
-  industries.forEach(i => { const o = new Option(i, i); iSel.add(o); });
-  const pSel = document.getElementById('f-product');
-  products.forEach(p => { const o = new Option(p, p); pSel.add(o); });
-  const tSel = document.getElementById('f-type');
-  types.forEach(t => { const o = new Option(t, t); tSel.add(o); });
-  const dsSel = document.getElementById('f-ds');
-  [...dsSet].sort().forEach(name => { const o = new Option(name, name); dsSel.add(o); });
-  const aeSel = document.getElementById('f-ae');
-  [...aeSet].sort().forEach(name => { const o = new Option(name, name); aeSel.add(o); });
-  const fdeSel = document.getElementById('f-fde');
-  [...fdeSet].sort().forEach(name => { const o = new Option(name, name); fdeSel.add(o); });
-}
 
-// ââ Build industry grid ââ
-function buildIndustryGrid() {
-  const counts = {};
-  DATA.forEach(d => counts[d.industry] = (counts[d.industry] || 0) + 1);
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  const grid = document.getElementById('industry-grid');
-  // "All Industries" card
-  const allCard = document.createElement('div');
-  allCard.className = 'industry-card active';
-  allCard.id = 'industry-card-all';
-  allCard.innerHTML = `
-    <div class="i-name">All Industries</div>
-    <div class="i-count">${DATA.length}</div>
-    <div class="i-sub">outcomes</div>
-  `;
-  allCard.onclick = () => {
-    activeIndustry = '';
-    document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
-    allCard.classList.add('active');
-    document.getElementById('f-industry').value = '';
-    applyFilters();
-  };
-  grid.appendChild(allCard);
-  sorted.forEach(([industry, count]) => {
-    const card = document.createElement('div');
-    card.className = 'industry-card';
-    card.dataset.industry = industry;
-    card.innerHTML = `
-      <div class="i-name">${industry}</div>
-      <div class="i-count">${count}</div>
-      <div class="i-sub">outcome${count !== 1 ? 's' : ''}</div>
-    `;
-    card.onclick = () => {
-      if (activeIndustry === industry) {
-        activeIndustry = '';
-        card.classList.remove('active');
-        document.getElementById('f-industry').value = '';
-        const allCard = document.getElementById('industry-card-all');
-        if (allCard) allCard.classList.add('active');
-      } else {
-        activeIndustry = industry;
-        document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        document.getElementById('f-industry').value = industry;
-      }
+  // ── State ──
+  let sortField = 'created';
+  let sortDir = 1;
+  let activeIndustry = '';
+
+  // ── Build filter options ──
+  function buildFilters() {
+    const industries = [...new Set(DATA.map(d => d.industry))].sort();
+    const products = [...new Set(DATA.flatMap(d => d.allProducts))].sort();
+    const types = [...new Set(DATA.flatMap(d => d.allTypes))].sort();
+    const dsSet = new Set(), aeSet = new Set(), fdeSet = new Set();
+    DATA.forEach(d => {
+      if (d.ds) dsSet.add(d.ds);
+      if (d.salesLead) aeSet.add(d.salesLead);
+      if (d.fde) fdeSet.add(d.fde);
+    });
+    const iSel = document.getElementById('f-industry');
+    industries.forEach(i => iSel.add(new Option(i, i)));
+    const pSel = document.getElementById('f-product');
+    products.forEach(p => pSel.add(new Option(p, p)));
+    const tSel = document.getElementById('f-type');
+    types.forEach(t => tSel.add(new Option(t, t)));
+    const dsSel = document.getElementById('f-ds');
+    [...dsSet].sort().forEach(name => dsSel.add(new Option(name, name)));
+    const aeSel = document.getElementById('f-ae');
+    [...aeSet].sort().forEach(name => aeSel.add(new Option(name, name)));
+    const fdeSel = document.getElementById('f-fde');
+    [...fdeSet].sort().forEach(name => fdeSel.add(new Option(name, name)));
+  }
+
+  // ── Build industry grid ──
+  function buildIndustryGrid() {
+    const counts = {};
+    DATA.forEach(d => counts[d.industry] = (counts[d.industry] || 0) + 1);
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const grid = document.getElementById('industry-grid');
+
+    const allCard = document.createElement('div');
+    allCard.className = 'industry-card active';
+    allCard.id = 'industry-card-all';
+    allCard.innerHTML = `<div class="i-name">All Industries</div><div class="i-count">${DATA.length}</div><div class="i-sub">outcomes</div>`;
+    allCard.onclick = () => {
+      activeIndustry = '';
+      document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
+      allCard.classList.add('active');
+      document.getElementById('f-industry').value = '';
       applyFilters();
     };
-    grid.appendChild(card);
-  });
-}
+    grid.appendChild(allCard);
 
-// ââ Tag helpers ââ
-function productTag(p) {
-  return `<span class="tag tag-product">${p}</span>`;
-}
-function typeTag(t) {
-  let cls = 'tag-type-risk';
-  if (t === 'Save Money' || t === 'Make Money') cls = 'tag-type-money';
-  if (t === 'Compliance') cls = 'tag-type-compliance';
-  return `<span class="tag ${cls}">${t}</span>`;
-}
-
-// ââ Filter & render ââ
-function applyFilters() {
-  const search = document.getElementById('search').value.toLowerCase();
-  const fInd  = document.getElementById('f-industry').value;
-  const fProd = document.getElementById('f-product').value;
-  const fType = document.getElementById('f-type').value;
-  const fComp = document.getElementById('f-complete').value;
-  const fDs   = document.getElementById('f-ds').value;
-  const fAe   = document.getElementById('f-ae').value;
-  const fFde  = document.getElementById('f-fde').value;
-
-  if (fInd !== activeIndustry) {
-    activeIndustry = fInd;
-    document.querySelectorAll('.industry-card').forEach(c => {
-      c.classList.toggle('active', c.dataset.industry === fInd);
+    sorted.forEach(([industry, count]) => {
+      const card = document.createElement('div');
+      card.className = 'industry-card';
+      card.dataset.industry = industry;
+      card.innerHTML = `<div class="i-name">${industry}</div><div class="i-count">${count}</div><div class="i-sub">outcome${count !== 1 ? 's' : ''}</div>`;
+      card.onclick = () => {
+        if (activeIndustry === industry) {
+          activeIndustry = '';
+          card.classList.remove('active');
+          document.getElementById('f-industry').value = '';
+          const allCard = document.getElementById('industry-card-all');
+          if (allCard) allCard.classList.add('active');
+        } else {
+          activeIndustry = industry;
+          document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          document.getElementById('f-industry').value = industry;
+        }
+        applyFilters();
+      };
+      grid.appendChild(card);
     });
   }
 
-  let filtered = DATA.filter(d => {
-    const teamStr = [d.ds, d.salesLead, d.fde].filter(Boolean).join(' ').toLowerCase();
-    if (search && !d.displayName.toLowerCase().includes(search) && !d.account.toLowerCase().includes(search) && !d.industry.toLowerCase().includes(search) && !d.allProducts.join(' ').toLowerCase().includes(search) && !d.allTypes.join(' ').toLowerCase().includes(search) && !teamStr.includes(search)) return false;
-    if (fInd  && d.industry !== fInd) return false;
-    if (fProd && !d.allProducts.includes(fProd)) return false;
-    if (fType && !d.allTypes.includes(fType)) return false;
-    if (fComp === 'complete'   && !d.isComplete) return false;
-    if (fComp === 'incomplete' &&  d.isComplete) return false;
-    if (fDs === 'unassigned-ds' && d.ds) return false;
-    if (fDs && fDs !== 'unassigned-ds' && d.ds !== fDs) return false;
-    if (fAe && d.salesLead !== fAe) return false;
-    if (fFde && d.fde !== fFde) return false;
-    return true;
-  });
-
-  filtered.sort((a, b) => {
-    let av = a[sortField] || '';
-    let bv = b[sortField] || '';
-    if (sortField === 'name') { av = a.displayName; bv = b.displayName; }
-    return av < bv ? -sortDir : av > bv ? sortDir : 0;
-  });
-
-  renderTable(filtered);
-  document.getElementById('results-count').textContent = `Showing ${filtered.length} of ${DATA.length}`;
-}
-
-function renderTable(rows) {
-  const tbody = document.getElementById('table-body');
-  if (rows.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">ð</div><p>No outcomes match your filters.</p></div></td></tr>`;
-    return;
-  }
-  tbody.innerHTML = rows.map(d => {
-    const sfUrl  = `${SF_BASE}/${d.recordId}/view`;
-    const sfLink = `<a href="${sfUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:#F05A28;text-decoration:none;opacity:0.85;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">&#x2197; View in Salesforce</a>`;
-
-    const stmtPreview = d.statement
-      ? `<div style="font-size:11px;color:#6b7280;line-height:1.5;margin-top:5px;max-width:300px;">${d.statement.length > 160 ? d.statement.slice(0, 160).trim() + '...' : d.statement}</div>`
-      : '';
-
-    const nameHtml = d.hasName
-      ? `<div class="outcome-name">${d.name}</div>${stmtPreview}${sfLink}`
-      : `<div class="outcome-name incomplete-name">Unnamed record</div><div class="incomplete-badge">NEEDS NAME</div>${sfLink}`;
-
-    const prodHtml = d.allProducts.length
-      ? d.allProducts.map(p => productTag(p)).join('')
-      : `<span class="tag tag-missing">Not mapped</span>`;
-
-    const typeHtml = d.allTypes.length
-      ? d.allTypes.map(t => typeTag(t)).join('')
-      : `<span class="tag tag-missing">â</span>`;
-
-    const teamLines = [];
-    teamLines.push(d.ds
-      ? `<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">DS</span> <span style="color:#1a1a2e;font-weight:500;">${d.ds}</span></div>`
-      : `<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">DS</span> <span class="incomplete-badge" style="margin:0;">UNASSIGNED</span></div>`
-    );
-    if (d.salesLead) teamLines.push(`<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">AE</span> <span style="color:#374151;">${d.salesLead}</span></div>`);
-    if (d.fde) teamLines.push(`<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">FDE</span> <span style="color:#374151;">${d.fde}</span></div>`);
-    const dsHtml = teamLines.join('');
-
-    const stageHtml = d.stage
-      ? `<span class="tag tag-stage">${d.stage}</span>`
-      : `<span style="color:#d1d5db">â</span>`;
-
-    const dateStr = d.created ? new Date(d.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'â';
-
-    return `<tr class="${d.isComplete ? '' : 'incomplete'}">
-      <td>${nameHtml}</td>
-      <td style="font-weight:500;color:#1a1a2e;white-space:nowrap;">${d.account || '<span style="color:#d1d5db">â</span>'}</td>
-      <td><span class="tag tag-industry">${d.industry}</span></td>
-      <td>${prodHtml}</td>
-      <td>${typeHtml}</td>
-      <td>${dsHtml}</td>
-      <td>${stageHtml}</td>
-      <td class="date-cell">${dateStr}</td>
-    </tr>`;
-  }).join('');
-}
-
-function sortBy(field) {
-  if (sortField === field) sortDir *= -1;
-  else { sortField = field; sortDir = 1; }
-  applyFilters();
-}
-
-function clearFilters() {
-  document.getElementById('search').value = '';
-  document.getElementById('f-industry').value = '';
-  document.getElementById('f-product').value = '';
-  document.getElementById('f-type').value = '';
-  document.getElementById('f-complete').value = '';
-  document.getElementById('f-ds').value = '';
-  document.getElementById('f-ae').value = '';
-  document.getElementById('f-fde').value = '';
-  activeIndustry = '';
-  document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
-  const allCard = document.getElementById('industry-card-all');
-  if (allCard) allCard.classList.add('active');
-  applyFilters();
-}
-
-// ââ Init ââ
-buildFilters();
-buildIndustryGrid();
-applyFilters();
-</script>
-<!-- ── Outcomes Advisor Chat Widget ──────────────────────────────────
-     Additive: appended before </body>. No existing HTML, CSS, or JS modified.
-     To connect to the Outcomes Advisor agent, update ADVISOR_URL below
-     to the direct URL of the agent in Alation Agent Studio.
-─────────────────────────────────────────────────────────────────── -->
-<style>
-  #adv-btn {
-    background: #F05A28; color: white; border: none;
-    border-radius: 28px; padding: 7px 15px;
-    font-size: 13px; font-weight: 700; cursor: pointer;
-    box-shadow: 0 2px 10px rgba(240,90,40,0.35);
-    display: flex; align-items: center; gap: 7px;
-    transition: transform 0.15s, box-shadow 0.15s;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    white-space: nowrap; flex-shrink: 0;
-  }
-  #adv-btn:hover { transform: translateY(1px); box-shadow: 0 4px 18px rgba(240,90,40,0.5); }
-  #adv-btn.adv-hidden { display: none; }
-
-  #adv-panel {
-    position: fixed; top: 68px; right: 16px;
-    width: 400px; max-height: 600px;
-    background: white; border-radius: 16px;
-    box-shadow: 0 16px 64px rgba(0,0,0,0.18);
-    display: none; flex-direction: column;
-    z-index: 10000; overflow: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    border: 1px solid rgba(0,0,0,0.08);
-    animation: advSlideUp 0.2s ease;
-  }
-  #adv-panel.adv-open { display: flex; }
-  @keyframes advSlideUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
+  // ── Tag helpers ──
+  function productTag(p) { return `<span class="tag tag-product">${p}</span>`; }
+  function typeTag(t) {
+    let cls = 'tag-type-risk';
+    if (t === 'Save Money' || t === 'Make Money') cls = 'tag-type-money';
+    if (t === 'Compliance') cls = 'tag-type-compliance';
+    return `<span class="tag ${cls}">${t}</span>`;
   }
 
-  #adv-header {
-    background: #1a1a2e; padding: 16px 18px;
-    display: flex; align-items: center; justify-content: space-between;
-    flex-shrink: 0;
-  }
-  #adv-header-left { display: flex; align-items: center; gap: 10px; }
-  #adv-logo {
-    width: 30px; height: 30px; background: #F05A28; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px; font-weight: 900; color: white;
-  }
-  #adv-title { font-size: 14px; font-weight: 700; color: white; }
-  #adv-subtitle { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
-  #adv-close {
-    background: rgba(255,255,255,0.1); border: none; color: white;
-    font-size: 20px; width: 28px; height: 28px; border-radius: 6px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: background 0.15s; line-height: 1; padding: 0;
-    font-family: inherit;
-  }
-  #adv-close:hover { background: rgba(255,255,255,0.2); }
+  // ── Filter & render ──
+  function applyFilters() {
+    const search = document.getElementById('search').value.toLowerCase();
+    const fInd = document.getElementById('f-industry').value;
+    const fProd = document.getElementById('f-product').value;
+    const fType = document.getElementById('f-type').value;
+    const fComp = document.getElementById('f-complete').value;
+    const fDs = document.getElementById('f-ds').value;
+    const fAe = document.getElementById('f-ae').value;
+    const fFde = document.getElementById('f-fde').value;
 
-  #adv-ctx-bar {
-    padding: 9px 16px; background: #f8f9fa; border-bottom: 1px solid #f0f0f0;
-    font-size: 11px; color: #6b7280; flex-shrink: 0;
-    display: none; align-items: center; gap: 5px; flex-wrap: wrap;
-  }
-  #adv-ctx-bar.adv-visible { display: flex; }
-  .adv-ctx-chip {
-    background: #eff6ff; color: #1d4ed8;
-    padding: 2px 8px; border-radius: 10px;
-    font-size: 11px; font-weight: 600;
-  }
-
-  #adv-body {
-    padding: 16px; overflow-y: auto; flex: 1;
-    display: flex; flex-direction: column; gap: 12px;
-  }
-  #adv-instructions {
-    font-size: 12px; color: #6b7280; line-height: 1.5;
-    background: #f8f9fa; border-radius: 8px; padding: 10px 12px;
-    border-left: 3px solid #F05A28;
-  }
-  #adv-instructions strong { color: #1a1a2e; }
-  #adv-sug-label {
-    font-size: 10px; font-weight: 700; color: #9ca3af;
-    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
-  }
-  #adv-suggestions { display: flex; flex-wrap: wrap; gap: 6px; }
-  .adv-sug {
-    background: #f4f5f7; border: 1px solid #e5e7eb;
-    border-radius: 14px; padding: 6px 13px;
-    font-size: 12px; color: #374151; cursor: pointer;
-    transition: all 0.15s; font-family: inherit; text-align: left;
-    display: flex; align-items: center; gap: 5px;
-  }  .adv-sug:hover { background: #fff4f0; border-color: #F05A28; color: #F05A28; }
-  #adv-divider {
-    text-align: center; font-size: 11px; color: #d1d5db;
-    display: flex; align-items: center; gap: 8px;
-  }
-  #adv-divider::before, #adv-divider::after {
-    content: ''; flex: 1; height: 1px; background: #e5e7eb;
-  }
-
-  #adv-footer {
-    padding: 12px 16px; border-top: 1px solid #f0f0f0;
-    display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;
-  }
-  #adv-open {
-    background: white; color: #374151; border: 1.5px solid #e5e7eb;
-    border-radius: 8px; padding: 10px 16px;
-    font-size: 13px; font-weight: 600; cursor: pointer;
-    transition: all 0.15s; font-family: inherit;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
-  #adv-open:hover { border-color: #F05A28; color: #F05A28; background: #fff4f0; }
-  #adv-hint { font-size: 11px; color: #9ca3af; text-align: center; line-height: 1.45; }
-
-  #adv-toast {
-    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
-    background: #1a1a2e; color: white; padding: 10px 22px;
-    border-radius: 20px; font-size: 13px; font-weight: 600;
-    z-index: 99999; opacity: 0; transition: opacity 0.3s;
-    pointer-events: none; white-space: nowrap;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.25);
-  }
-</style>
-
-<script>
-(function() {
-  // ── Config: set ADVISOR_URL to the direct link for the Outcomes Advisor agent ──
-  const ADVISOR_URL = 'https://aaa.alationcloud.com/app/studio/agents/a/b9798455-2546-403c-9503-9f6a55d1db04';
-
-  const SUGGESTIONS = [
-    'What outcomes exist for financial services?',
-    'Show me successful Agent Studio use cases',
-    'What are the strongest healthcare outcomes?',
-    'Help me build an outcome for a new customer',
-    'Which outcomes are missing product mapping?',
-  ];
-
-  // ── Inject HTML ──
-  const wrapper = document.createElement('div');
-  wrapper.id = 'adv-widget';
-  wrapper.innerHTML = `
-    <button id="adv-btn">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="flex-shrink:0" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 3C7.03 3 3 6.58 3 11c0 2.4 1.18 4.55 3 6.02V21l3.7-2.12c.74.17 1.51.26 2.3.26 4.97 0 9-3.58 9-8s-4.03-8-9-8zm1 11H11v-2h2v2zm0-4H11V7h2v3z" fill="white"/>
-      </svg>
-      Ask Advisor
-    </button>
-    <div id="adv-panel">
-      <div id="adv-header">
-        <div id="adv-header-left">
-          <div id="adv-logo">A</div>
-          <div>
-            <div id="adv-title">Outcomes Advisor</div>
-            <div id="adv-subtitle">Powered by Alation Agent Studio</div>
-          </div>
-        </div>
-        <button id="adv-close" title="Close">&times;</button>
-      </div>
-      <div id="adv-ctx-bar">
-        <span style="color:#9ca3af">Viewing:</span>
-        <span id="adv-ctx-chips"></span>
-      </div>
-      <div id="adv-body">
-        <div id="adv-instructions">
-          <strong>Sign into <a href="https://aaa.alationcloud.com" target="_blank" style="color:#F05A28;text-decoration:none">A@A</a> first.</strong> Then click any question below to copy your prompt and open Advisor — paste it into the chat to get started.<br><br>
-          Or use the button below to open Advisor and type your own question directly.
-        </div>
-        <div>
-          <div id="adv-sug-label">Select a question to launch</div>
-          <div id="adv-suggestions"></div>
-        </div>
-        <div id="adv-divider">or</div>
-      </div>
-      <div id="adv-footer">
-        <button id="adv-open">Open Advisor with your own question &rarr;</button>
-        <div id="adv-hint">Opens Advisor in a new tab. Type your question directly in the chat.</div>
-      </div>
-    </div>
-  `;
-  // Place button in header, panel in body
-  const advBtn   = wrapper.querySelector('#adv-btn');
-  const advPanel = wrapper.querySelector('#adv-panel');
-  const hdr = document.querySelector('header');
-  if (hdr) hdr.appendChild(advBtn); else document.body.appendChild(advBtn);
-  document.body.appendChild(advPanel);
-
-  // Toast
-  const toastEl = document.createElement('div');
-  toastEl.id = 'adv-toast';
-  document.body.appendChild(toastEl);
-  function showToast(msg) {
-    toastEl.textContent = msg;
-    toastEl.style.opacity = '1';
-    clearTimeout(window._advToastTimer);
-    window._advToastTimer = setTimeout(() => { toastEl.style.opacity = '0'; }, 3500);
-  }
-
-  // ── Suggestions ──
-  const sugEl = document.getElementById('adv-suggestions');
-  SUGGESTIONS.forEach(text => {
-    const b = document.createElement('button');
-    b.className = 'adv-sug';
-    b.textContent = text;
-    b.onclick = () => {
-      const prompt = buildPrompt(text);
-      try { navigator.clipboard.writeText(prompt); } catch(e) {}
-      window.open(ADVISOR_URL, '_blank');
-      closePanel();
-      showToast('\u2713 Opening Advisor \u2014 paste your prompt to get started');
-    };
-    sugEl.appendChild(b);
-  });
-
-  // ── Context reading ──
-  function getCtx() {
-    const chips = [];
-    const ind  = document.getElementById('f-industry')?.value;
-    const prod = document.getElementById('f-product')?.value;
-    const type = document.getElementById('f-type')?.value;
-    const ds   = document.getElementById('f-ds')?.value;
-    const ae   = document.getElementById('f-ae')?.value;
-    const cnt  = document.getElementById('results-count')?.textContent || '';
-    if (ind)  chips.push(ind);
-    if (prod) chips.push(prod);
-    if (type) chips.push(type);
-    if (ds && ds !== 'unassigned-ds') chips.push('DS: ' + ds);
-    if (ae)   chips.push('AE: ' + ae);
-    return { chips, cnt };
-  }
-
-  function updateCtxBar() {
-    const { chips } = getCtx();
-    const bar     = document.getElementById('adv-ctx-bar');
-    const chipsEl = document.getElementById('adv-ctx-chips');
-    if (chips.length) {
-      chipsEl.innerHTML = chips.map(c => `<span class="adv-ctx-chip">${c}</span>`).join(' ');
-      bar.classList.add('adv-visible');
-    } else {
-      bar.classList.remove('adv-visible');
+    if (fInd !== activeIndustry) {
+      activeIndustry = fInd;
+      document.querySelectorAll('.industry-card').forEach(c => {
+        c.classList.toggle('active', c.dataset.industry === fInd);
+      });
     }
+
+    let filtered = DATA.filter(d => {
+      const teamStr = [d.ds, d.salesLead, d.fde].filter(Boolean).join(' ').toLowerCase();
+      if (search && !d.displayName.toLowerCase().includes(search) && !d.account.toLowerCase().includes(search) && !d.industry.toLowerCase().includes(search) && !d.allProducts.join(' ').toLowerCase().includes(search) && !d.allTypes.join(' ').toLowerCase().includes(search) && !teamStr.includes(search)) return false;
+      if (fInd && d.industry !== fInd) return false;
+      if (fProd && !d.allProducts.includes(fProd)) return false;
+      if (fType && !d.allTypes.includes(fType)) return false;
+      if (fComp === 'complete' && !d.isComplete) return false;
+      if (fComp === 'incomplete' && d.isComplete) return false;
+      if (fDs === 'unassigned-ds' && d.ds) return false;
+      if (fDs && fDs !== 'unassigned-ds' && d.ds !== fDs) return false;
+      if (fAe && d.salesLead !== fAe) return false;
+      if (fFde && d.fde !== fFde) return false;
+      return true;
+    });
+
+    filtered.sort((a, b) => {
+      let av = a[sortField] || '';
+      let bv = b[sortField] || '';
+      if (sortField === 'name') { av = a.displayName; bv = b.displayName; }
+      return av < bv ? -sortDir : av > bv ? sortDir : 0;
+    });
+
+    renderTable(filtered);
+    document.getElementById('results-count').textContent = `Showing ${filtered.length} of ${DATA.length}`;
   }
 
-  function buildPrompt(question) {
-    const { chips, cnt } = getCtx();
-    let p = '';
-    if (chips.length) {
-      p += 'Context: I am viewing the Business Outcomes Library, currently filtered to: ' + chips.join(', ') + '.';
-      if (cnt) p += ' ' + cnt + '.';
-      p += '\n\n';
-    } else {
-      p += 'Context: I am viewing the full Business Outcomes Library (no filters active).\n\n';
+  function renderTable(rows) {
+    const tbody = document.getElementById('table-body');
+    if (rows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">🔍</div><p>No outcomes match your filters.</p></div></td></tr>`;
+      return;
     }
-    p += 'Question: ' + question;
-    return p;
+    tbody.innerHTML = rows.map(d => {
+      const sfUrl = `${SF_BASE}/${d.recordId}/view`;
+      const sfLink = `<a href="${sfUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;font-weight:600;color:#F05A28;text-decoration:none;opacity:0.85;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.85">&#x2197; View in Salesforce</a>`;
+      const stmtPreview = d.statement ? `<div style="font-size:11px;color:#6b7280;line-height:1.5;margin-top:5px;max-width:300px;">${d.statement.length > 160 ? d.statement.slice(0, 160).trim() + '...' : d.statement}</div>` : '';
+      const nameHtml = d.hasName
+        ? `<div class="outcome-name">${d.name}</div>${stmtPreview}${sfLink}`
+        : `<div class="outcome-name incomplete-name">Unnamed record</div><div class="incomplete-badge">NEEDS NAME</div>${sfLink}`;
+      const prodHtml = d.allProducts.length ? d.allProducts.map(p => productTag(p)).join('') : `<span class="tag tag-missing">Not mapped</span>`;
+      const typeHtml = d.allTypes.length ? d.allTypes.map(t => typeTag(t)).join('') : `<span class="tag tag-missing">—</span>`;
+      const teamLines = [];
+      teamLines.push(d.ds
+        ? `<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">DS</span> <span style="color:#1a1a2e;font-weight:500;">${d.ds}</span></div>`
+        : `<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">DS</span> <span class="incomplete-badge" style="margin:0;">UNASSIGNED</span></div>`
+      );
+      if (d.salesLead) teamLines.push(`<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">AE</span> <span style="color:#374151;">${d.salesLead}</span></div>`);
+      if (d.fde) teamLines.push(`<div style="font-size:12px;line-height:1.5;"><span style="color:#9ca3af;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">FDE</span> <span style="color:#374151;">${d.fde}</span></div>`);
+      const stageHtml = d.stage ? `<span class="tag tag-stage">${d.stage}</span>` : `<span style="color:#d1d5db">—</span>`;
+      const dateStr = d.created ? new Date(d.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+      return `<tr class="${d.isComplete ? '' : 'incomplete'}">
+        <td>${nameHtml}</td>
+        <td style="font-weight:500;color:#1a1a2e;white-space:nowrap;">${d.account || '<span style="color:#d1d5db">—</span>'}</td>
+        <td><span class="tag tag-industry">${d.industry}</span></td>
+        <td>${prodHtml}</td>
+        <td>${typeHtml}</td>
+        <td>${teamLines.join('')}</td>
+        <td>${stageHtml}</td>
+        <td class="date-cell">${dateStr}</td>
+      </tr>`;
+    }).join('');
   }
 
-  // ── Toggle ──
-  function openPanel() {
-    document.getElementById('adv-btn').classList.add('adv-hidden');
-    document.getElementById('adv-panel').classList.add('adv-open');
-    updateCtxBar();
-  }
-  function closePanel() {
-    document.getElementById('adv-btn').classList.remove('adv-hidden');
-    document.getElementById('adv-panel').classList.remove('adv-open');
+  function sortBy(field) {
+    if (sortField === field) sortDir *= -1;
+    else { sortField = field; sortDir = 1; }
+    applyFilters();
   }
 
-  document.getElementById('adv-btn').onclick   = openPanel;
-  document.getElementById('adv-close').onclick = closePanel;
+  function clearFilters() {
+    document.getElementById('search').value = '';
+    document.getElementById('f-industry').value = '';
+    document.getElementById('f-product').value = '';
+    document.getElementById('f-type').value = '';
+    document.getElementById('f-complete').value = '';
+    document.getElementById('f-ds').value = '';
+    document.getElementById('f-ae').value = '';
+    document.getElementById('f-fde').value = '';
+    activeIndustry = '';
+    document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('active'));
+    const allCard = document.getElementById('industry-card-all');
+    if (allCard) allCard.classList.add('active');
+    applyFilters();
+  }
 
-  // ── Open Advisor (custom question) ──
-  document.getElementById('adv-open').onclick = function() {
-    window.open(ADVISOR_URL, '_blank');
-    closePanel();
-  };
-
-
-
-})();
+  // ── Init ──
+  buildFilters();
+  buildIndustryGrid();
+  applyFilters();
 </script>
 
 </body>

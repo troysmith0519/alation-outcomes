@@ -30,24 +30,6 @@
     .header-right { display: flex; align-items: center; gap: 16px; }
     .header-meta { font-size: 12px; color: #9ca3af; }
 
-    /* ── Plugin Button (header) ── */
-    .plugin-header-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: #F05A28;
-      color: white;
-      text-decoration: none;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 2px 8px rgba(240,90,40,0.3);
-    }
-    .plugin-header-btn:hover { background: #d94e20; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(240,90,40,0.45); }
-
     /* ── Plugin Callout Banner ── */
     .plugin-callout {
       background: linear-gradient(135deg, #1a1a2e 0%, #0f2547 100%);
@@ -79,6 +61,13 @@
     }
     .plugin-download-btn:hover { background: #d94e20; transform: translateY(-1px); }
     .plugin-callout-hint { font-size: 11px; color: rgba(255,255,255,0.38); text-align: right; }
+    .plugin-ask-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: #F05A28; text-decoration: none; font-size: 13px; font-weight: 700;
+      padding: 8px 16px; border: 1.5px solid rgba(240,90,40,0.5); border-radius: 8px;
+      white-space: nowrap; transition: all 0.2s;
+    }
+    .plugin-ask-link:hover { background: rgba(240,90,40,0.1); border-color: #F05A28; }
 
     .main { max-width: 1400px; margin: 0 auto; padding: 28px 32px; }
 
@@ -169,17 +158,13 @@
       </div>
     </div>
     <div class="header-right">
-      <div class="header-meta">Last refreshed: April 29, 2026</div>
-      <a class="plugin-header-btn" href="https://troysmith0519.github.io/alation-outcomes/alation-outcomes-advisor.plugin" download="alation-outcomes-advisor.plugin">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-6 2h12v2H6v-2z"/></svg>
-        Get the Plugin
-      </a>
+      <div class="header-meta">Last refreshed: DATA_LAST_REFRESHED</div>
     </div>
   </header>
 
   <div class="main">
 
-    <!-- Plugin Install Callout -->
+    <!-- Plugin Callout Banner -->
     <div class="plugin-callout">
       <div class="plugin-callout-content">
         <div class="plugin-callout-icon">
@@ -188,14 +173,17 @@
           </svg>
         </div>
         <div>
-          <div class="plugin-callout-title">Browse here. Build in Claude.</div>
-          <div class="plugin-callout-desc">Use the Outcomes Advisor plugin to dig deeper into existing outcomes, draft new ones for your customers, and create strategy working session docs and decks — directly inside Claude.</div>
+          <div class="plugin-callout-title">Use this library to find the right outcomes — then build them in Claude.</div>
+          <div class="plugin-callout-desc">With the Outcomes Advisor plugin, you can build outcome drafts, create strategy working session docs, and explore what's worked for similar customers — right in Claude Cowork. Already have it? Jump straight in.</div>
         </div>
       </div>
       <div class="plugin-callout-actions">
+        <a class="plugin-ask-link" href="https://claude.ai/new?q=Help%20me%20build%20a%20business%20outcome%20for%20a%20customer%20using%20the%20Outcomes%20Advisor" target="_blank" rel="noopener">
+          Ask Claude &rarr;
+        </a>
         <a class="plugin-download-btn" href="https://troysmith0519.github.io/alation-outcomes/alation-outcomes-advisor.plugin" download="alation-outcomes-advisor.plugin">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-6 2h12v2H6v-2z"/></svg>
-          Download Plugin
+          Get the Plugin
         </a>
         <div class="plugin-callout-hint">Requires Claude &middot; Cowork mode</div>
       </div>

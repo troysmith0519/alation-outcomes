@@ -119,7 +119,9 @@ def build_html(rows):
     today = datetime.date.today().strftime("%B %-d, %Y")
     data_array = "[\n" + ",\n".join(row_to_js(r) for r in rows) + "\n]"
     html = html.replace("DATA_PLACEHOLDER", data_array)
-    html = re.sub(r"Last refreshed:.*?</div>", f"Last refreshed: {today}</div>", html)
+    # template.html has two DATA_LAST_REFRESHED placeholders: one in the
+    # header, one in the footer. Plain string replace catches both.
+    html = html.replace("DATA_LAST_REFRESHED", today)
     total = len(rows)
     html = re.sub(
         r'<div class="stat-value orange" id="stat-total">\d+</div>',
